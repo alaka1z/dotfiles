@@ -11,6 +11,19 @@
 # Use a softer foreground colour for directories in `ls` / `Get-ChildItem`.
 $PSStyle.FileInfo.Directory = $PSStyle.Foreground.BrightBlack
 
+# ============================================================
+# Shell conveniences
+# ============================================================
+
+# Jump to the main configuration directory.
+function config {
+    Set-Location "$HOME\.config"
+}
+
+# Reload the PowerShell configuration in the current session.
+function reload {
+    . $PROFILE
+}
 
 # ============================================================
 # Shell integration
