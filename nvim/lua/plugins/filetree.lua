@@ -9,6 +9,10 @@ return {
     },
     lazy = false,
     opts = {
+      window = {
+        width = 32,
+      },
+
       event_handlers = {
         {
           event = "file_opened",
