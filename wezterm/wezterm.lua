@@ -78,6 +78,7 @@ config.cell_width = 1
 
 -- Background opacity: 1 is fully opaque, 0.9 is 90% opaque, etc.
 config.window_background_opacity = 1
+config.text_background_opacity = 1
 
 -- Terminal and tab-bar colours.
 --[[
