@@ -3,6 +3,14 @@ return {
     "ibhagwan/fzf-lua",
     opts = {
       "telescope",
+
+      spell_suggest = {
+        winopts = {
+          height = 0.33,
+          width = 0.33,
+          relative = "cursor",
+        },
+      },
     },
 
     keys = {
@@ -25,6 +33,11 @@ return {
         "<leader>fr",
         "<cmd>FzfLua resume<cr>",
         desc = "Resume search",
+      },
+      {
+        "<leader>ss",
+        "<cmd>FzfLua spell_suggest<cr>",
+        desc = "Spell suggestions",
       },
     },
   },

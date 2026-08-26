@@ -55,3 +55,6 @@ map("v", ">", ">gv", { desc = "Indent right" })
 
 -- Plugins
 require("config.lazy")
+
+-- Auto Commands
+require("config.autocmds")
