@@ -14,6 +14,7 @@ local options = {
   -- Editing
   undofile = true, -- Persist undo history between sessions
   clipboard = "unnamedplus", -- Use the Windows system clipboard
+  fileformats = { "unix", "dos" }, -- Prefer LF for new files while still detecting CRLF
 
   -- Search
   ignorecase = true,
