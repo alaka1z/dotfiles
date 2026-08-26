@@ -6,6 +6,7 @@ return {
       spec = {
         {"<leader>f", group = "Find"},
         {"<leader>s", group = "Search"},
+        {"<leader>r", desc = "Reload config", icon = "󰑓" },
       },
 
       icons = {
