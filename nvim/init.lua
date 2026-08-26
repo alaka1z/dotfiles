@@ -1,3 +1,8 @@
+-- Leader
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Options
 local options = {
   -- Appearance
   number = true,
@@ -33,3 +38,16 @@ local options = {
 for key, value in pairs(options) do
   vim.opt[key] = value
 end
+
+-- Keymaps
+local map = vim.keymap.set
+
+-- Reserve Space for leader mappings
+map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+
+-- Reload configuration
+map("n", "<leader>r", "<cmd>source $MYVIMRC<CR>", { desc = "Reload config" })
+
+-- Keep text selected after indenting
+map("v", "<", "<gv", { desc = "Indent left" })
+map("v", ">", ">gv", { desc = "Indent right" })
