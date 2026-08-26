@@ -47,7 +47,7 @@ local map = vim.keymap.set
 map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Reload configuration
-map("n", "<leader>r", "<cmd>source $MYVIMRC<CR>", { desc = "Reload config" })
+map("n", "<leader>r", "<cmd>restart<CR>", { desc = "Reload config" })
 
 -- Keep text selected after indenting
 map("v", "<", "<gv", { desc = "Indent left" })
