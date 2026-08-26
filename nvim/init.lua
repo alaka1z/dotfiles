@@ -51,3 +51,6 @@ map("n", "<leader>r", "<cmd>source $MYVIMRC<CR>", { desc = "Reload config" })
 -- Keep text selected after indenting
 map("v", "<", "<gv", { desc = "Indent left" })
 map("v", ">", ">gv", { desc = "Indent right" })
+
+-- Plugins
+require("config.lazy")
