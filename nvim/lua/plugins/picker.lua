@@ -4,6 +4,14 @@ return {
     opts = {
       "telescope",
 
+      winopts = {
+        title_flags = false,
+      },
+
+      grep = {
+        no_header_i = true,
+      },
+
       spell_suggest = {
         winopts = {
           height = 0.33,
@@ -21,7 +29,7 @@ return {
       },
       {
         "<leader>fg",
-        "<cmd>FzfLua live_grep<cr>",
+        "<cmd>FzfLua grep_project<cr>",
         desc = "Grep files",
       },
       {

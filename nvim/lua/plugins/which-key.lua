@@ -7,6 +7,10 @@ return {
         {"<leader>f", group = "Find"},
         {"<leader>s", group = "Search"},
       },
+
+      icons = {
+        group = "",
+      },
     },
   },
 }
