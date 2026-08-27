@@ -19,3 +19,6 @@ map("v", ">", ">gv", { desc = "Indent right" })
 map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 
+-- Comment remap
+map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
+map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
