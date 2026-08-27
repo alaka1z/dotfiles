@@ -10,12 +10,15 @@ return {
 
   settings = {
     Lua = {
+      -- Match the Lua runtime embedded in Neovim
       runtime = {
         version = "LuaJIT",
       },
 
       workspace = {
         checkThirdParty = false,
+
+        -- Make Neovim's vim API available to LuaLS
         library = {
           vim.env.VIMRUNTIME,
         },

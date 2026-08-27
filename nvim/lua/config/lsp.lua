@@ -1,5 +1,6 @@
 vim.lsp.enable("lua_ls")
 
+-- Keep diagnostics unobtrusive and show their details on demand
 vim.diagnostic.config({
   signs = {
     text = {

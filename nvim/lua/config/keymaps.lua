@@ -26,7 +26,7 @@ map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 map("n", "<leader>w", "<cmd>wa!<cr>", { desc = "Save all" })
 map("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })
 
--- Opens LSP Diagnostics
+-- Show diagnostics at the cursor
 map("n", "<leader>d", vim.diagnostic.open_float, {
   desc = "Diagnostics",
 })
