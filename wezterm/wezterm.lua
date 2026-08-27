@@ -1,7 +1,5 @@
--- Load WezTerm's Lua API and create the configuration object.
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
-
 
 -- Behaviour
 
@@ -11,11 +9,9 @@ config.default_prog = { "pwsh.exe", "-NoLogo" }
 -- Remove the normal Windows title bar
 config.window_decorations = "RESIZE"
 
-
 -- Hide the tab bar until more than one tab exists
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
-
 
 -- Show the current directory as the tab title
 wezterm.on("format-tab-title", function(tab)
@@ -38,17 +34,17 @@ wezterm.on("format-tab-title", function(tab)
 end)
 
 config.keys = {
-    -- Type ~ on keyboards without a dedicated tilde key.
+    -- Type ~ on keyboards without a dedicated tilde key
     {
         key = "Escape",
         mods = "SHIFT",
         action = wezterm.action.SendString("~"),
     },
 
-    -- Work around a Windows title-bar flash when returning to fullscreen.
+    -- Work around a Windows title-bar flash when returning to fullscreen
     --
     -- Enter fullscreen from a normally decorated window, then restore the
-    -- titleless RESIZE configuration while leaving fullscreen.
+    -- titleless RESIZE configuration while leaving fullscreen
     {
         key = "Enter",
         mods = "ALT",
@@ -87,8 +83,8 @@ config.default_cursor_style = "BlinkingBar"
 -- Optional / experiments
 -- ============================================================
 
--- Remove all space between terminal content and the window edges.
--- Currently disabled so WezTerm uses its default padding.
+-- Remove all space between terminal content and the window edges
+-- Currently disabled so WezTerm uses its default padding
 
 -- config.window_padding = {
 --     left = 0,

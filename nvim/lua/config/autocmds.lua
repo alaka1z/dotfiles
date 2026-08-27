@@ -1,11 +1,11 @@
--- Highlight yanked text
+-- Briefly highlight text after yanking
 vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank()
   end,
 })
 
--- Restore cursor position
+-- Restore the last cursor position when reopening a file
 vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function()
     local mark = vim.api.nvim_buf_get_mark(0, '"')

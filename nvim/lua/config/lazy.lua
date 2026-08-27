@@ -1,5 +1,6 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
+-- Install lazy.nvim automatically if it is not already available
 if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -11,6 +12,7 @@ if not vim.uv.fs_stat(lazypath) then
   })
 end
 
+-- Add lazy.nvim to Neovim's runtime path before loading plugin specs
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({

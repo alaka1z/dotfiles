@@ -1,4 +1,3 @@
--- Keymaps
 local map = vim.keymap.set
 
 -- Reserve Space for leader mappings
@@ -7,11 +6,11 @@ map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- Reload configuration
 map("n", "<leader>r", "<cmd>restart<CR>", { desc = "Reload config" })
 
--- Indentation
+-- Use single < and > presses to indent the current line
 map("n", ">", ">>", { desc = "Indent right" })
 map("n", "<", "<<", { desc = "Indent left" })
 
--- Keep text selected after indenting
+-- Keep the selection active when indenting multiple lines
 map("v", "<", "<gv", { desc = "Indent left" })
 map("v", ">", ">gv", { desc = "Indent right" })
 
@@ -19,6 +18,6 @@ map("v", ">", ">gv", { desc = "Indent right" })
 map("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
 map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 
--- Comment remap
+-- Ctrl+/ toggles Neovim's native language-aware commenting
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
