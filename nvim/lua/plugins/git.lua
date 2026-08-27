@@ -1,7 +1,10 @@
 return {
   {
     "lewis6991/gitsigns.nvim",
+
+    -- Load for file buffers so Git signs are available immediately
     event = { "BufReadPre", "BufNewFile" },
+
     opts = {},
 
     keys = {

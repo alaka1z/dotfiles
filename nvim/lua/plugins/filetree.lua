@@ -10,9 +10,11 @@ return {
     lazy = false,
     opts = {
       window = {
+        -- Keep the explorer narrow enough to preserve editor space
         width = 32,
       },
 
+      -- Close the explorer after opening a file
       event_handlers = {
         {
           event = "file_opened",

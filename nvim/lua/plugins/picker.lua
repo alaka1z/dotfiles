@@ -4,18 +4,22 @@ return {
     opts = {
       "telescope",
 
+      -- Hide picker title flags such as the hidden-files indicator
       winopts = {
         title_flags = false,
       },
 
+      -- Hide the Ctrl+G regex-search hint while keeping the mapping available
       grep = {
         no_header_i = true,
       },
 
+      -- Hide the extra details column in the keymaps picker
       keymaps = {
         show_details = false,
       },
 
+      -- Show spelling suggestions in a small picker near the cursor
       spell_suggest = {
         winopts = {
           height = 0.33,
