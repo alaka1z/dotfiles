@@ -61,6 +61,11 @@ return {
         desc = "Resume search",
       },
       {
+        "<leader>fw",
+        "<cmd>FzfLua grep_cword<cr>",
+        desc = "Find word",
+      },
+      {
         "<leader>ss",
         "<cmd>FzfLua spell_suggest<cr>",
         desc = "Spell suggestions",
