@@ -1,7 +1,8 @@
 [init]
 	defaultBranch = main
 [core]
-	autocrlf = input
+  autocrlf = input
+  safecrlf = false
 [user]
 	name = alaka
 	email = alakazoidiac@gmail.com
