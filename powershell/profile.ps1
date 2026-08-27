@@ -1,36 +1,24 @@
-# ============================================================
-# PowerShell configuration
-# ============================================================
-
-# Main configuration loaded whenever PowerShell 7 starts.
-
-# ============================================================
-# Appearance
-# ============================================================
-
-# Use a softer foreground colour for directories in `ls` / `Get-ChildItem`.
+# PowerShell 7 profile loaded through the standard $PROFILE
+#
+# Use a softer colour for directory names in directory listings
 $PSStyle.FileInfo.Directory = $PSStyle.Foreground.BrightBlack
 
-# ============================================================
-# Shell conveniences
-# ============================================================
+# Shortcuts
 
-# Jump to the main configuration directory.
+# Jump to the main configuration directory
 function config {
     Set-Location "$HOME\.config"
 }
 
-# Reload the PowerShell configuration in the current session.
+# Reload the PowerShell configuration in the current session
 function reload {
     . $PROFILE
 }
 
-# ============================================================
-# Shell integration
-# ============================================================
+# WezTerm integration
 
-# Tell WezTerm the current working directory whenever Starship draws a prompt.
-# This lets WezTerm reliably track each pane's current directory.
+# Tell WezTerm the current working directory whenever Starship draws a prompt
+# This lets WezTerm reliably track each pane's current directory
 function Invoke-Starship-PreCommand {
     $currentLocation = $executionContext.SessionState.Path.CurrentLocation
 
@@ -44,9 +32,7 @@ function Invoke-Starship-PreCommand {
 }
 
 
-# ============================================================
 # Prompt
-# ============================================================
 
-# Initialize Starship as the PowerShell prompt.
+# Initialize Starship as the PowerShell prompt
 Invoke-Expression (&starship init powershell)

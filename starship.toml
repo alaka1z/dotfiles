@@ -1,1 +1,2 @@
+# Keep consecutive prompts compact without an extra blank line
 add_newline = false
