@@ -21,3 +21,7 @@ map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 -- Ctrl+/ toggles Neovim's native language-aware commenting
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
+
+-- Save and Quit
+vim.keymap.set("n", "<leader>w", "<cmd>wa!<cr>", { desc = "Save all" })
+vim.keymap.set("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })

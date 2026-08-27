@@ -4,10 +4,11 @@ return {
     event = "VeryLazy",
     opts = {
       spec = {
-        {"<leader>f", group = "Find"},
+        {"<leader>f", group = "Find", icon = "󰈞"},
         { "<leader>g", group = "Git" },
         {"<leader>s", group = "Search"},
-        {"<leader>r", desc = "Reload config", icon = "󰑓" },
+        {"<leader>r", desc = "Reload Config", icon = "󰑓" },
+        {"<leader>w", desc = "Save All", icon = "󰆓"}
       },
 
       -- Remove the default + prefix from group names
