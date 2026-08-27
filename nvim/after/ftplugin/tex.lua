@@ -1,7 +1,8 @@
 local map = vim.keymap.set
+local opt = vim.opt_local
 
 -- Enable spell checking only while editing TeX
-vim.opt_local.spell = true
+opt.spell = true
 
 -- opt.conceallevel = 2
 -- opt.concealcursor = "nc"
