@@ -14,10 +14,6 @@ return {
 
       keymaps = {
         show_details = false,
-
-        fzf_opts = {
-          ["--header"] = false,
-        },
       },
 
       spell_suggest = {

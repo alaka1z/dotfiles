@@ -16,6 +16,7 @@ config.default_prog = { "pwsh.exe", "-NoLogo" }
 -- Remove the normal Windows title bar while keeping the resize border.
 -- The window can still be moved with Ctrl + Shift + left-drag.
 config.window_decorations = "RESIZE"
+-- config.window_decorations = "TITLE|RESIZE"
 
 
 -- Hide the tab bar when only one tab exists, and use the simpler tab style.
@@ -55,11 +56,22 @@ config.keys = {
         mods = "SHIFT",
         action = wezterm.action.SendString("~"),
     },
+    {
+        key = "Enter",
+        mods = "ALT",
+        action = wezterm.action_callback(function(window, pane)
+            local overrides = window:get_config_overrides() or {}
 
-    -- future binding
-    -- {
-    --     ...
-    -- },
+            if window:get_dimensions().is_full_screen then
+                overrides.window_decorations = "RESIZE"
+            else
+                overrides.window_decorations = "TITLE|RESIZE"
+            end
+
+            window:set_config_overrides(overrides)
+            window:perform_action(wezterm.action.ToggleFullScreen, pane)
+        end),
+    },
 }
 
 -- ============================================================
@@ -79,34 +91,6 @@ config.cell_width = 1
 -- Background opacity: 1 is fully opaque, 0.9 is 90% opaque, etc.
 config.window_background_opacity = 1
 config.text_background_opacity = 1
-
--- Terminal and tab-bar colours.
---[[
-config.colors = {
-    -- Almost black with a slight purple tint.
-    background = "#0c0b0f",
-
-    tab_bar = {
-        -- Matching backgrounds keep the tab bar flat and minimal.
-        background = "#0c0b0f",
-
-        active_tab = {
-            bg_color = "#0c0b0f",
-            fg_color = "#bea3c7", -- muted lavender
-        },
-
-        inactive_tab = {
-            bg_color = "#0c0b0f",
-            fg_color = "#f8f2f5", -- soft off-white
-        },
-
-        new_tab = {
-            bg_color = "#0c0b0f",
-            fg_color = "#f8f2f5",
-        },
-    },
-}
-]]
 
 -- Use Catppuccin Mocha as the terminal colour scheme.
 config.color_scheme = "Catppuccin Mocha"
