@@ -1,8 +1,14 @@
 [init]
+  # Use main for newly created repositories.
 	defaultBranch = main
+
 [core]
+  # Normalize CRLF to LF on commit without converting LF to CRLF on checkout.
   autocrlf = input
+
+  # Allow line-ending normalization without CRLF/LF conversion warnings.
   safecrlf = false
+
 [user]
 	name = alaka
 	email = alakazoidiac@gmail.com

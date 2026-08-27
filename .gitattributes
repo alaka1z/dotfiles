@@ -1,1 +1,2 @@
+# Keep text files LF-normalized across Windows and other platforms.
 * text=auto eol=lf
