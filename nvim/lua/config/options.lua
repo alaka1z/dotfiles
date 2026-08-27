@@ -2,6 +2,7 @@ local options = {
   -- Appearance
   number = true,
   relativenumber = true,
+  numberwidth = 1,
   cursorline = true,
   cursorlineopt = "both",
   signcolumn = "yes", -- Keep the gutter visible
