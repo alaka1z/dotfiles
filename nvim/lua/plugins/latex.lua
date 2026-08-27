@@ -3,6 +3,9 @@ return {
         "lervag/vimtex",
         lazy = false,
         init = function()
+            -- Disable unnecessary mappings
+            vim.g.vimtex_mappings_enabled = 0
+
             -- Use the general viewer backend to avoid an extra cmd window on Windows
             vim.g.vimtex_view_method = "general"
             vim.g.vimtex_view_general_viewer = 'start ""'
