@@ -23,10 +23,10 @@ map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 
 -- Save and Quit
-vim.keymap.set("n", "<leader>w", "<cmd>wa!<cr>", { desc = "Save all" })
-vim.keymap.set("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })
+map("n", "<leader>w", "<cmd>wa!<cr>", { desc = "Save all" })
+map("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })
 
 -- Opens LSP Diagnostics
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {
-    desc = "Diagnostics",
+map("n", "<leader>d", vim.diagnostic.open_float, {
+  desc = "Diagnostics",
 })
