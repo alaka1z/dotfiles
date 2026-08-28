@@ -22,7 +22,7 @@ map("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true })
 map("n", "<C-_>", "gcc", { remap = true, desc = "Toggle comment" })
 map("v", "<C-_>", "gc", { remap = true, desc = "Toggle comment" })
 
--- Save and Quit
+-- Save and quit
 map("n", "<leader>w", "<cmd>wa!<cr>", { desc = "Save all" })
 map("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })
 

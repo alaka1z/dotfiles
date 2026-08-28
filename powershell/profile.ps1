@@ -1,5 +1,5 @@
 # PowerShell 7 profile loaded through the standard $PROFILE
-#
+
 # Use a softer colour for directory names in directory listings
 $PSStyle.FileInfo.Directory = $PSStyle.Foreground.BrightBlack
 
@@ -30,7 +30,6 @@ function Invoke-Starship-PreCommand {
         $Host.UI.Write($osc7)
     }
 }
-
 
 # Prompt
 

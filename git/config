@@ -1,6 +1,6 @@
 [init]
   # Use main for newly created repositories
-	defaultBranch = main
+  defaultBranch = main
 
 [core]
   # Normalize CRLF to LF on commit without converting LF to CRLF on checkout
@@ -10,5 +10,5 @@
   safecrlf = false
 
 [user]
-	name = alaka
-	email = alakazoidiac@gmail.com
+  name = alaka
+  email = alakazoidiac@gmail.com
