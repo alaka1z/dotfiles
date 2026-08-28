@@ -9,6 +9,7 @@ return {
         { "<leader>s", group = "Search" },
         { "<leader>r", desc = "Reload Config", icon = "󰑓" },
         { "<leader>w", desc = "Save All", icon = "󰆓" },
+        { "<leader>o", icon = "", desc = "Reveal in Explorer" },
         {
           "<leader>l",
           group = "LaTeX",

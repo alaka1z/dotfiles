@@ -30,3 +30,14 @@ map("n", "<leader>q", "<cmd>wa! | qa!<cr>", { desc = "Quit" })
 map("n", "<leader>d", vim.diagnostic.open_float, {
   desc = "Diagnostics",
 })
+
+-- Reveal the current file in File Explorer
+map("n", "<leader>o", function()
+  local path = vim.fn.expand("%:p"):gsub("/", "\\")
+
+  if path == "" then
+    return
+  end
+
+  os.execute('explorer.exe /select,"' .. path .. '"')
+end, { desc = "Reveal in Explorer" })
