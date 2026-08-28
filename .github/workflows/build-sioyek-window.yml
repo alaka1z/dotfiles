@@ -14,13 +14,22 @@ jobs:
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build window helper
+      - name: Build color helper
         shell: cmd
         run: >
           cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
-          sioyek\window-helper\main.cpp
-          /Fe:sioyek-window.exe
+          sioyek\window-helper\color.cpp
+          /Fe:sioyek-color.exe
           user32.lib dwmapi.lib
+          /link /SUBSYSTEM:WINDOWS
+
+      - name: Build maximize helper
+        shell: cmd
+        run: >
+          cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
+          sioyek\window-helper\maximize.cpp
+          /Fe:sioyek-maximize.exe
+          user32.lib
           /link /SUBSYSTEM:WINDOWS
 
       - name: Build drag helper
@@ -32,29 +41,20 @@ jobs:
           user32.lib
           /link /SUBSYSTEM:WINDOWS
 
-      - name: Build color helper
-        shell: cmd
-        run: >
-          cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
-          sioyek\window-helper\color.cpp
-          /Fe:sioyek-color.exe
-          user32.lib dwmapi.lib
-          /link /SUBSYSTEM:WINDOWS
-
-      - name: Upload window helper
+      - name: Upload color helper
         uses: actions/upload-artifact@v4
         with:
-          name: sioyek-window
-          path: sioyek-window.exe
+          name: sioyek-color
+          path: sioyek-color.exe
+
+      - name: Upload maximize helper
+        uses: actions/upload-artifact@v4
+        with:
+          name: sioyek-maximize
+          path: sioyek-maximize.exe
 
       - name: Upload drag helper
         uses: actions/upload-artifact@v4
         with:
           name: sioyek-drag
           path: sioyek-drag.exe
-
-      - name: Upload color helper
-        uses: actions/upload-artifact@v4
-        with:
-          name: sioyek-color
-          path: sioyek-color.exe
