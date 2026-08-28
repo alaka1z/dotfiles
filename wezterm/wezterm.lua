@@ -44,26 +44,35 @@ config.keys = {
         action = wezterm.action.SendString("~"),
     },
 
+    -- Maximize the window without entering fullscreen
+    {
+        key = "Enter",
+        mods = "ALT",
+        action = wezterm.action_callback(function(window)
+            window:maximize()
+        end),
+    },
+
     -- Work around a Windows title-bar flash when returning to fullscreen
     --
     -- Enter fullscreen from a normally decorated window, then restore the
     -- titleless RESIZE configuration while leaving fullscreen
-    {
-        key = "Enter",
-        mods = "ALT",
-        action = wezterm.action_callback(function(window, pane)
-            local overrides = window:get_config_overrides() or {}
-
-            if window:get_dimensions().is_full_screen then
-                overrides.window_decorations = "RESIZE"
-            else
-                overrides.window_decorations = "TITLE|RESIZE"
-            end
-
-            window:set_config_overrides(overrides)
-            window:perform_action(wezterm.action.ToggleFullScreen, pane)
-        end),
-    },
+    -- {
+    --     key = "Enter",
+    --     mods = "ALT",
+    --     action = wezterm.action_callback(function(window, pane)
+    --         local overrides = window:get_config_overrides() or {}
+    --
+    --         if window:get_dimensions().is_full_screen then
+    --             overrides.window_decorations = "RESIZE"
+    --         else
+    --             overrides.window_decorations = "TITLE|RESIZE"
+    --         end
+    --
+    --         window:set_config_overrides(overrides)
+    --         window:perform_action(wezterm.action.ToggleFullScreen, pane)
+    --     end),
+    -- },
 }
 
 -- Appearance
