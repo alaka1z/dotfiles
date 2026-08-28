@@ -3,6 +3,7 @@
 
 static HWND sioyek_window = nullptr;
 
+// Find the visible top-level window owned by sioyek.exe
 BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
 {
     if (!IsWindowVisible(hwnd)) {
@@ -58,6 +59,7 @@ int WINAPI wWinMain(
         return 0;
     }
 
+    // Restore maximize support after Sioyek removes its title bar
     LONG_PTR style = GetWindowLongPtrW(
         sioyek_window,
         GWL_STYLE
@@ -71,6 +73,7 @@ int WINAPI wWinMain(
         style
     );
 
+    // Force Windows to recalculate the frame after changing the window style
     SetWindowPos(
         sioyek_window,
         nullptr,

@@ -14,6 +14,7 @@ static bool key_down(int key)
     return (GetAsyncKeyState(key) & 0x8000) != 0;
 }
 
+// Find the visible top-level window owned by sioyek.exe
 BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
 {
     if (!IsWindowVisible(hwnd)) {
@@ -58,6 +59,7 @@ BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
     return TRUE;
 }
 
+// Move Sioyek with Ctrl+Shift+left-drag while leaving normal mouse input untouched
 LRESULT CALLBACK mouse_hook_callback(
     int code,
     WPARAM w_param,
@@ -76,6 +78,7 @@ LRESULT CALLBACK mouse_hook_callback(
     const auto* mouse =
         reinterpret_cast<MSLLHOOKSTRUCT*>(l_param);
 
+    // Require the modifiers to be held before left click to avoid accidental drags
     if (
         w_param == WM_LBUTTONDOWN &&
         !dragging &&
@@ -180,6 +183,7 @@ int WINAPI wWinMain(
 
     MSG message{};
 
+    // Wait for either Sioyek to exit or Windows input to become available
     while (true) {
         const DWORD result = MsgWaitForMultipleObjects(
             1,

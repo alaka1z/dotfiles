@@ -6,6 +6,7 @@
 
 static HWND sioyek_window = nullptr;
 
+// Find the visible top-level window owned by sioyek.exe
 BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
 {
     if (!IsWindowVisible(hwnd)) {
@@ -61,6 +62,7 @@ int WINAPI wWinMain(
         return 0;
     }
 
+    // Make the remaining Windows caption strip white
     constexpr DWORD DWMWA_CAPTION_COLOR = 35;
     constexpr DWORD white = RGB(255, 255, 255);
 
