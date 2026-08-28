@@ -9,6 +9,9 @@ config.default_prog = { "pwsh.exe", "-NoLogo" }
 -- Remove the normal Windows title bar
 config.window_decorations = "RESIZE"
 
+-- Disable WezTerm's mux SSH agent integration
+config.mux_enable_ssh_agent = false
+
 -- Hide the tab bar until more than one tab exists
 config.hide_tab_bar_if_only_one_tab = true
 config.use_fancy_tab_bar = false
