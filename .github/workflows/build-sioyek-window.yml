@@ -1,11 +1,11 @@
-name: Build Sioyek Window Helper
+name: Build Sioyek Window Helpers
 
 on:
   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: windows-latest
+    jobs:
+      build:
+        runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -14,7 +14,7 @@ jobs:
       - name: Set up MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Build
+      - name: Build window helper
         shell: cmd
         run: >
           cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
@@ -23,8 +23,23 @@ jobs:
           user32.lib dwmapi.lib
           /link /SUBSYSTEM:WINDOWS
 
-      - name: Upload executable
+      - name: Build drag helper
+        shell: cmd
+        run: >
+          cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
+          sioyek\window-helper\drag.cpp
+          /Fe:sioyek-drag.exe
+          user32.lib
+          /link /SUBSYSTEM:WINDOWS
+
+      - name: Upload window helper
         uses: actions/upload-artifact@v4
         with:
           name: sioyek-window
           path: sioyek-window.exe
+
+      - name: Upload drag helper
+        uses: actions/upload-artifact@v4
+        with:
+          name: sioyek-drag
+          path: sioyek-drag.exe
