@@ -32,6 +32,15 @@ jobs:
           user32.lib
           /link /SUBSYSTEM:WINDOWS
 
+      - name: Build color helper
+        shell: cmd
+        run: >
+          cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
+          sioyek\window-helper\color.cpp
+          /Fe:sioyek-color.exe
+          user32.lib dwmapi.lib
+          /link /SUBSYSTEM:WINDOWS
+
       - name: Upload window helper
         uses: actions/upload-artifact@v4
         with:
@@ -43,3 +52,9 @@ jobs:
         with:
           name: sioyek-drag
           path: sioyek-drag.exe
+
+      - name: Upload color helper
+        uses: actions/upload-artifact@v4
+        with:
+          name: sioyek-color
+          path: sioyek-color.exe
