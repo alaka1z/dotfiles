@@ -9,6 +9,11 @@ return {
     },
     lazy = false,
     opts = {
+      filesystem = {
+        filtered_items = {
+          hide_dotfiles = false,
+        },
+      },
       window = {
         -- Keep the explorer narrow enough to preserve editor space
         width = 32,
@@ -30,7 +35,7 @@ return {
     keys = {
       {
         "<leader>e",
-        "<cmd>Neotree toggle<cr>",
+        "<cmd>Neotree toggle reveal<cr>",
         desc = "Explorer",
       },
     },
