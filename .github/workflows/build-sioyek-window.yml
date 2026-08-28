@@ -1,0 +1,30 @@
+name: Build Sioyek Window Helper
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build
+        shell: cmd
+        run: >
+          cl /nologo /O2 /EHsc /DUNICODE /D_UNICODE
+          sioyek\window-helper\main.cpp
+          /Fe:sioyek-window.exe
+          user32.lib dwmapi.lib
+          /link /SUBSYSTEM:WINDOWS
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: sioyek-window
+          path: sioyek-window.exe
