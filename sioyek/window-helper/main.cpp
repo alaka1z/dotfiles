@@ -32,6 +32,7 @@ BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
         std::wstring executable(path);
 
         const auto separator = executable.find_last_of(L"\\/");
+
         if (separator != std::wstring::npos) {
             executable = executable.substr(separator + 1);
         }
@@ -47,8 +48,49 @@ BOOL CALLBACK find_sioyek_window(HWND hwnd, LPARAM)
     return TRUE;
 }
 
+LRESULT CALLBACK mouse_hook(
+    int code,
+    WPARAM w_param,
+    LPARAM l_param
+)
+{
+    if (
+        code == HC_ACTION &&
+        w_param == WM_LBUTTONDOWN &&
+        (GetAsyncKeyState(VK_CONTROL) & 0x8000) &&
+        (GetAsyncKeyState(VK_SHIFT) & 0x8000)
+    ) {
+        const auto* mouse =
+            reinterpret_cast<MSLLHOOKSTRUCT*>(l_param);
+
+        HWND window = WindowFromPoint(mouse->pt);
+
+        if (window) {
+            window = GetAncestor(window, GA_ROOT);
+        }
+
+        if (window == sioyek_window) {
+            PostMessageW(
+                sioyek_window,
+                WM_NCLBUTTONDOWN,
+                HTCAPTION,
+                MAKELPARAM(mouse->pt.x, mouse->pt.y)
+            );
+
+            return 1;
+        }
+    }
+
+    return CallNextHookEx(
+        nullptr,
+        code,
+        w_param,
+        l_param
+    );
+}
+
 int WINAPI wWinMain(
-    HINSTANCE,
+    HINSTANCE instance,
     HINSTANCE,
     PWSTR,
     int
@@ -87,7 +129,8 @@ int WINAPI wWinMain(
         SWP_FRAMECHANGED
     );
 
-    constexpr DWORD caption_color = RGB(255, 255, 255);
+    constexpr DWORD caption_color =
+        RGB(255, 255, 255);
 
     DwmSetWindowAttribute(
         sioyek_window,
@@ -95,6 +138,30 @@ int WINAPI wWinMain(
         &caption_color,
         sizeof(caption_color)
     );
+
+    HHOOK hook = SetWindowsHookExW(
+        WH_MOUSE_LL,
+        mouse_hook,
+        instance,
+        0
+    );
+
+    if (!hook) {
+        return 0;
+    }
+
+    MSG message;
+
+    while (GetMessageW(&message, nullptr, 0, 0) > 0) {
+        if (!IsWindow(sioyek_window)) {
+            break;
+        }
+
+        TranslateMessage(&message);
+        DispatchMessageW(&message);
+    }
+
+    UnhookWindowsHookEx(hook);
 
     return 0;
 }
