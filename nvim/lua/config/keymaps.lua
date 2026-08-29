@@ -41,3 +41,9 @@ map("n", "<leader>o", function()
 
   os.execute('explorer.exe /select,"' .. path .. '"')
 end, { desc = "Reveal in Explorer" })
+
+-- Clear search highlighting and stale messages
+map("n", "<Esc>", function()
+  vim.cmd("nohlsearch")
+  vim.cmd('echo ""')
+end, { desc = "Clear search and messages" })
