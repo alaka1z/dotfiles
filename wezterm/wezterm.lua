@@ -3,6 +3,10 @@ local config = wezterm.config_builder()
 
 -- Behaviour
 
+-- Set the default opening size
+config.initial_cols = 100
+config.initial_rows = 32
+
 -- Launch PowerShell 7 without its startup banner
 config.default_prog = { "pwsh.exe", "-NoLogo" }
 
