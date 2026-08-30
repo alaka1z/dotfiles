@@ -6,47 +6,24 @@ return {
 
     config = function()
       local ls = require("luasnip")
+      local build = require("snippets.build")
       local map = vim.keymap.set
-      local snippet_path = vim.fn.stdpath("config") .. "/snippets"
-
-      -- Use VimTeX to detect whether the cursor is currently inside math
       local function in_mathzone()
         return vim.fn["vimtex#syntax#in_mathzone"]() == 1
       end
 
       ls.config.setup({
         enable_autosnippets = true,
-
-        -- Expose tex_math snippets only while inside a VimTeX math zone
-        ft_func = function()
-          local ft = vim.bo.filetype
-
-          if ft == "tex" and in_mathzone() then
-            return { "tex", "tex_math" }
-          end
-
-          return { ft }
-        end,
-
-        -- Load tex_math with TeX buffers so it is ready when ft_func activates it
-        load_ft_func = function(bufnr)
-          local ft = vim.bo[bufnr].filetype
-
-          if ft == "tex" then
-            return { "tex", "tex_math" }
-          end
-
-          return { ft }
-        end,
       })
 
-      -- Use SnipMate for ordinary snippets and Lua for dynamic snippets
-      require("luasnip.loaders.from_snipmate").lazy_load({
-        paths = snippet_path .. "/snipmate",
+      ls.add_snippets("tex", build.build(require("snippets.tex")), {
+        key = "tex",
       })
 
-      require("luasnip.loaders.from_lua").lazy_load({
-        paths = snippet_path .. "/lua",
+      ls.add_snippets("tex", build.build(require("snippets.math"), {
+        condition = in_mathzone,
+      }), {
+        key = "math",
       })
 
       -- Expand snippets and move forward through their fields
