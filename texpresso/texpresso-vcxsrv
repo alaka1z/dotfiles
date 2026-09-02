@@ -9,4 +9,12 @@ fi
 
 export DISPLAY="${host}:0.0"
 
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+focus_script="$(wslpath -w "$script_dir/texpresso-focus.ps1")"
+
+pwsh.exe \
+  -NoProfile \
+  -File "$focus_script" \
+  >/dev/null 2>&1 &
+
 exec "$HOME/src/texpresso/build/texpresso" "$@"
