@@ -57,3 +57,56 @@ end, {
   buffer = true,
   desc = "Toggle TeXpresso titlebar",
 })
+
+map("n", "<leader>ts", function()
+  local tex = vim.api.nvim_buf_get_name(0)
+  local pdf = vim.fn.fnamemodify(tex, ":r") .. ".pdf"
+  local cwd = vim.fn.fnamemodify(tex, ":h")
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+
+  vim.cmd("write")
+
+  vim.system({
+    "latexmk",
+    "-xelatex",
+    "-synctex=1",
+    vim.fn.fnamemodify(tex, ":t"),
+  }, {
+    cwd = cwd,
+  }, function(result)
+    if result.code ~= 0 then
+      vim.schedule(function()
+        vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
+      end)
+      return
+    end
+
+    vim.system({
+      "sioyek",
+      "--inverse-search",
+      [[nvim --headless -c "VimtexInverseSearch %2 '%1'"]],
+      "--forward-search-file",
+      tex,
+      "--forward-search-line",
+      tostring(line),
+      pdf,
+    }, {
+      detach = true,
+    })
+  end)
+end, {
+  buffer = true,
+  desc = "Build and open Sioyek",
+})
+
+map("n", "<leader>tp", function()
+  vim.system({
+    "pwsh.exe",
+    "-NoProfile",
+    "-File",
+    vim.fn.expand("~/.config/texpresso/texpresso-focus.ps1"),
+  })
+end, {
+  buffer = true,
+  desc = "Focus TeXpresso",
+})
