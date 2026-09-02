@@ -19,7 +19,7 @@ return {
 
       -- Use pdfLaTeX by default for fast builds and reliable SyncTeX
       vim.g.vimtex_compiler_latexmk_engines = {
-        _ = "-pdf",
+        _ = "-xelatex",
       }
     end,
   },
