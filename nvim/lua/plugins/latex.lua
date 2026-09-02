@@ -1,6 +1,14 @@
+local texpresso_distro = "Ubuntu-24.04"
+
+local windows_home = vim.fn.expand("~"):gsub("\\", "/")
+local drive, rest = windows_home:match("^([A-Za-z]):/(.*)$")
+local wsl_home = "/mnt/" .. drive:lower() .. "/" .. rest
+local texpresso_wrapper = wsl_home .. "/.config/texpresso/texpresso-vcxsrv"
+
 return {
   {
-    "lervag/vimtex",
+    "alaka1z/vimtex",
+    branch = "texpresso-wsl-minimal",
 
     -- Keep VimTeX available from startup for TeX commands and callbacks
     lazy = false,
@@ -9,17 +17,23 @@ return {
       -- Disable VimTeX's default mappings in favor of our TeX-local mappings
       vim.g.vimtex_mappings_enabled = 0
 
-      -- Use the general viewer backend to avoid an extra cmd window on Windows
-      vim.g.vimtex_view_method = "general"
-      vim.g.vimtex_view_general_viewer = 'start ""'
+      vim.g.vimtex_compiler_method = "texpresso"
 
-      -- Launch Sioyek with forward and inverse SyncTeX support
-      vim.g.vimtex_view_general_options =
-        [[sioyek --inverse-search "nvim --headless -c \"VimtexInverseSearch %2 '%1'\"" --forward-search-file @tex --forward-search-line @line @pdf]]
+      vim.g.vimtex_compiler_texpresso = {
+        wsl = texpresso_distro,
 
-      -- Use pdfLaTeX by default for fast builds and reliable SyncTeX
-      vim.g.vimtex_compiler_latexmk_engines = {
-        _ = "-pdf",
+        executable = {
+          "wsl.exe",
+          "-d",
+          texpresso_distro,
+          "--",
+          "sh",
+          texpresso_wrapper,
+        },
+
+        options = {
+          "-texlive",
+        },
       }
     end,
   },
