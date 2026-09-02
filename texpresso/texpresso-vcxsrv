@@ -1,0 +1,12 @@
+#!/bin/sh
+
+host="$(ip route show default | awk '/default/ { print $3; exit }')"
+
+if [ -z "$host" ]; then
+  echo "Could not determine Windows host address" >&2
+  exit 1
+fi
+
+export DISPLAY="${host}:0.0"
+
+exec "$HOME/src/texpresso/build/texpresso" "$@"
