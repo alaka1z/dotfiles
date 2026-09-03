@@ -11,12 +11,9 @@ return {
         { "<leader>w", desc = "Save All", icon = "󰆓" },
         { "<leader>o", icon = "", desc = "Reveal in Explorer" },
         {
-          "<leader>l",
+          "<leader>t",
           group = "LaTeX",
           icon = "󰙩",
-          cond = function()
-            return vim.bo.filetype == "tex"
-          end,
         },
       },
 

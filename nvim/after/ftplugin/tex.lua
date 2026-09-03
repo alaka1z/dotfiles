@@ -19,22 +19,41 @@ map("n", "<leader>v", "<cmd>VimtexView<cr>", {
 })
 
 -- Less frequent VimTeX actions
-map("n", "<leader>le", "<cmd>VimtexErrors<cr>", {
+map("n", "<leader>te", "<cmd>VimtexErrors<cr>", {
   buffer = true,
   desc = "Errors",
 })
 
-map("n", "<leader>lx", "<cmd>VimtexClean<cr>", {
+map("n", "<leader>tx", "<cmd>VimtexClean<cr>", {
   buffer = true,
   desc = "Clean",
 })
 
-map("n", "<leader>lt", "<cmd>VimtexTocOpen<cr>", {
+map("n", "<leader>tt", "<cmd>VimtexTocOpen<cr>", {
   buffer = true,
   desc = "Table of contents",
 })
 
-map("n", "<leader>lk", "<cmd>VimtexStop<cr>", {
+map("n", "<leader>tk", "<cmd>VimtexStop<cr>", {
   buffer = true,
   desc = "Stop compiler",
+})
+
+map("n", "<leader>tf", function()
+  vim.cmd("call b:vimtex.compiler.texpresso_synctex_forward_toggle()")
+end, {
+  buffer = true,
+  desc = "Toggle TeXpresso follow",
+})
+
+map("n", "<leader>tt", function()
+  vim.system({
+    "pwsh.exe",
+    "-NoProfile",
+    "-File",
+    vim.fn.expand("~/.config/texpresso/texpresso-toggle-titlebar.ps1"),
+  })
+end, {
+  buffer = true,
+  desc = "Toggle TeXpresso titlebar",
 })
