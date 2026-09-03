@@ -7,8 +7,9 @@ local texpresso_wrapper = wsl_home .. "/.config/texpresso/texpresso-vcxsrv"
 
 return {
   {
-    "alaka1z/vimtex",
-    branch = "texpresso-wsl-minimal",
+    dir = vim.fn.expand("~/dev/vimtex-wsl"),
+    -- "alaka1z/vimtex",
+    -- branch = "texpresso-wsl-minimal",
 
     -- Keep VimTeX available from startup for TeX commands and callbacks
     lazy = false,

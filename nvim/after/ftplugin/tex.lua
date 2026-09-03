@@ -8,15 +8,103 @@ opt.spell = true
 -- opt.concealcursor = "nc"
 
 -- Frequently used VimTeX actions
-map("n", "<leader>b", "<cmd>VimtexCompile<cr>", {
+
+-- map("n", "<leader>b", "<cmd>VimtexCompile!<cr>", {
+--   buffer = true,
+--   desc = "Compile",
+-- })
+
+map("n", "<leader>b", function()
+  local script =
+    vim.fn.expand("~/.config/texpresso/texpresso-return.ps1")
+
+  local output = vim.fn.system(
+    'pwsh.exe -NoProfile -File "' .. script .. '"'
+  )
+
+  if vim.v.shell_error ~= 0 then
+    vim.notify(output, vim.log.levels.ERROR)
+    return
+  end
+
+  vim.cmd("VimtexCompile!")
+end, {
   buffer = true,
   desc = "Compile",
 })
 
-map("n", "<leader>v", "<cmd>VimtexView<cr>", {
+map("n", "<leader>v", function()
+  local tex = vim.api.nvim_buf_get_name(0)
+  local pdf = vim.fn.fnamemodify(tex, ":r") .. ".pdf"
+  local cwd = vim.fn.fnamemodify(tex, ":h")
+  local filename = vim.fn.fnamemodify(tex, ":t")
+  local line = vim.api.nvim_win_get_cursor(0)[1]
+
+  local geometry =
+    vim.fn.expand("~/.config/texpresso/sioyek-geometry.ps1")
+
+  local takeover =
+    vim.fn.expand("~/.config/texpresso/sioyek-takeover.ps1")
+
+  vim.cmd("write")
+
+  vim.system({
+    "latexmk",
+    "-xelatex",
+    "-synctex=1",
+    filename,
+  }, {
+    cwd = cwd,
+  }, function(result)
+    if result.code ~= 0 then
+      vim.schedule(function()
+        vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
+      end)
+      return
+    end
+
+    vim.schedule(function()
+      local geometry_result = vim.system({
+        "pwsh.exe",
+        "-NoProfile",
+        "-File",
+        geometry,
+      }):wait()
+
+      if geometry_result.code ~= 0 then
+        vim.notify(
+          geometry_result.stderr,
+          vim.log.levels.ERROR
+        )
+        return
+      end
+
+      vim.system({
+        "pwsh.exe",
+        "-NoProfile",
+        "-File",
+        takeover,
+      })
+
+      vim.system({
+        "sioyek",
+        "--inverse-search",
+        [[nvim --headless -c "VimtexInverseSearch %2 '%1'"]],
+        "--forward-search-file",
+        tex,
+        "--forward-search-line",
+        tostring(line),
+        pdf,
+      }, {
+        detach = true,
+      })
+    end)
+  end)
+end, {
   buffer = true,
-  desc = "View",
+  desc = "View in Sioyek",
 })
+
 
 -- Less frequent VimTeX actions
 map("n", "<leader>te", "<cmd>VimtexErrors<cr>", {
@@ -56,47 +144,6 @@ map("n", "<leader>tt", function()
 end, {
   buffer = true,
   desc = "Toggle TeXpresso titlebar",
-})
-
-map("n", "<leader>ts", function()
-  local tex = vim.api.nvim_buf_get_name(0)
-  local pdf = vim.fn.fnamemodify(tex, ":r") .. ".pdf"
-  local cwd = vim.fn.fnamemodify(tex, ":h")
-  local line = vim.api.nvim_win_get_cursor(0)[1]
-
-  vim.cmd("write")
-
-  vim.system({
-    "latexmk",
-    "-xelatex",
-    "-synctex=1",
-    vim.fn.fnamemodify(tex, ":t"),
-  }, {
-    cwd = cwd,
-  }, function(result)
-    if result.code ~= 0 then
-      vim.schedule(function()
-        vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
-      end)
-      return
-    end
-
-    vim.system({
-      "sioyek",
-      "--inverse-search",
-      [[nvim --headless -c "VimtexInverseSearch %2 '%1'"]],
-      "--forward-search-file",
-      tex,
-      "--forward-search-line",
-      tostring(line),
-      pdf,
-    }, {
-      detach = true,
-    })
-  end)
-end, {
-  buffer = true,
-  desc = "Build and open Sioyek",
 })
 
 map("n", "<leader>tp", function()
