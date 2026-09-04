@@ -53,16 +53,11 @@ map("n", "<leader>tc", "<cmd>VimtexTocOpen<cr>", {
   desc = "Table of contents",
 })
 
-map("n", "<leader>tk", "<cmd>VimtexStop<cr>", {
-  buffer = true,
-  desc = "Stop compiler",
-})
-
 local function set_mode_mappings()
-  local buffer = vim.api.nvim_get_current_buf()
-
-  pcall(vim.keymap.del, "n", "<leader>tf", { buffer = buffer })
-  pcall(vim.keymap.del, "n", "<leader>tt", { buffer = buffer })
+  pcall(vim.keymap.del, "n", "<leader>tf", { buffer = true })
+  pcall(vim.keymap.del, "n", "<leader>tt", { buffer = true })
+  pcall(vim.keymap.del, "n", "<leader>tsb", { buffer = true })
+  pcall(vim.keymap.del, "n", "<leader>tsv", { buffer = true })
 
   if vim.g.latex_viewer_mode ~= "texpresso" then
     return
@@ -80,15 +75,43 @@ local function set_mode_mappings()
       "pwsh.exe",
       "-NoProfile",
       "-File",
-      vim.fn.expand(
-        "~/.config/texpresso/texpresso-toggle-titlebar.ps1"
-      ),
+      vim.fn.expand("~/.config/texpresso/texpresso-toggle-titlebar.ps1"),
     })
   end, {
     buffer = true,
     desc = "Toggle TeXpresso titlebar",
   })
+
+  map("n", "<leader>tsb", function()
+    local tex = vim.b.vimtex.tex
+    local cwd = vim.fn.fnamemodify(tex, ":h")
+    local filename = vim.fn.fnamemodify(tex, ":t")
+
+    vim.system({
+      "latexmk",
+      "-xelatex",
+      "-synctex=1",
+      filename,
+    }, {
+      cwd = cwd,
+    }, function(result)
+      if result.code ~= 0 then
+        vim.schedule(function()
+          vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
+        end)
+      end
+    end)
+  end, {
+    buffer = true,
+    desc = "Build PDF with Sioyek",
+  })
+
+  map("n", "<leader>tsv", "<cmd>VimtexView<cr>", {
+    buffer = true,
+    desc = "View in Sioyek",
+  })
 end
+
 
 map("n", "<leader>tm", function()
   vim.cmd("VimtexStop")

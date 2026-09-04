@@ -15,6 +15,11 @@ return {
           group = "LaTeX",
           icon = "󰙩",
         },
+        {
+          "<leader>ts",
+          group = "Sioyek",
+          icon = "󰈙",
+        },
       },
 
       -- Remove the default + prefix from group names
