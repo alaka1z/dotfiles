@@ -112,10 +112,30 @@ local function set_mode_mappings()
   })
 end
 
+local function sync_mode()
+  if not vim.b.vimtex or not vim.b.vimtex.compiler then
+    return
+  end
+
+  local expected =
+    vim.g.latex_viewer_mode == "texpresso"
+      and "texpresso"
+      or "latexmk"
+
+  if vim.b.vimtex.compiler.name ~= expected then
+    if vim.b.vimtex.compiler.name == "texpresso" then
+      vim.cmd("autocmd! vimtex_compiler_texpresso * <buffer>")
+    end
+
+    vim.cmd("VimtexStop")
+    vim.g.vimtex_compiler_method = expected
+    vim.cmd("VimtexReload")
+  end
+
+  set_mode_mappings()
+end
 
 map("n", "<leader>tm", function()
-  vim.cmd("VimtexStop")
-
   if vim.g.latex_viewer_mode == "sioyek" then
     vim.g.latex_viewer_mode = "texpresso"
     vim.g.vimtex_compiler_method = "texpresso"
@@ -124,8 +144,7 @@ map("n", "<leader>tm", function()
     vim.g.vimtex_compiler_method = "latexmk"
   end
 
-  vim.cmd("VimtexReload")
-  set_mode_mappings()
+  sync_mode()
 
   vim.notify(
     "LaTeX mode: " .. vim.g.latex_viewer_mode
@@ -135,4 +154,11 @@ end, {
   desc = "Switch LaTeX mode",
 })
 
+vim.api.nvim_create_autocmd("BufEnter", {
+  buffer = vim.api.nvim_get_current_buf(),
+  callback = sync_mode,
+})
+
 set_mode_mappings()
+
+
