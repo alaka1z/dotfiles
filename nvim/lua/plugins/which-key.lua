@@ -10,16 +10,8 @@ return {
         { "<leader>r", desc = "Reload Config", icon = "󰑓" },
         { "<leader>w", desc = "Save All", icon = "󰆓" },
         { "<leader>o", icon = "", desc = "Reveal in Explorer" },
-        {
-          "<leader>t",
-          group = "LaTeX",
-          icon = "󰙩",
-        },
-        {
-          "<leader>ts",
-          group = "Sioyek",
-          icon = "󰈙",
-        },
+        { "<leader>t", group = "TeX", icon = "󰙩" },
+        { "<leader>ts", group = "Sioyek", icon = "󰈙" },
       },
 
       -- Remove the default + prefix from group names

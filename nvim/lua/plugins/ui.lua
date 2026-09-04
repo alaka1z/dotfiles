@@ -20,6 +20,7 @@ return {
         theme = "auto",
       },
 
+      -- Show the active LaTeX mode alongside the filetype in TeX buffers
       sections = {
         lualine_x = {
           {
