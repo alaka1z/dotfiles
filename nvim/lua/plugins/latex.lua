@@ -18,7 +18,12 @@ return {
       vim.g.vimtex_mappings_enabled = 0
 
       -- Use TeXpresso as the compiler for this initial test
-      vim.g.vimtex_compiler_method = "texpresso"
+      vim.g.latex_viewer_mode = vim.g.latex_viewer_mode or "sioyek"
+
+      vim.g.vimtex_compiler_method =
+      vim.g.latex_viewer_mode == "texpresso"
+      and "texpresso"
+      or "latexmk"
 
       vim.g.vimtex_compiler_texpresso = {
         wsl = texpresso_distro,
