@@ -53,6 +53,7 @@ map("n", "<leader>tc", "<cmd>VimtexTocOpen<cr>", {
   desc = "Table of contents",
 })
 
+-- Add mappings that only apply in TeXpresso mode
 local function set_mode_mappings()
   pcall(vim.keymap.del, "n", "<leader>tf", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tt", { buffer = true })
@@ -112,6 +113,7 @@ local function set_mode_mappings()
   })
 end
 
+-- Keep each VimTeX buffer aligned with the global LaTeX mode
 local function sync_mode()
   if not vim.b.vimtex or not vim.b.vimtex.compiler then
     return
@@ -123,10 +125,6 @@ local function sync_mode()
       or "latexmk"
 
   if vim.b.vimtex.compiler.name ~= expected then
-    if vim.b.vimtex.compiler.name == "texpresso" then
-      vim.cmd("autocmd! vimtex_compiler_texpresso * <buffer>")
-    end
-
     vim.cmd("VimtexStop")
     vim.g.vimtex_compiler_method = expected
     vim.cmd("VimtexReload")
@@ -160,5 +158,3 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 set_mode_mappings()
-
-

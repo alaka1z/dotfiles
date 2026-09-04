@@ -17,7 +17,7 @@ return {
       -- Disable VimTeX's default mappings in favor of our TeX-local mappings
       vim.g.vimtex_mappings_enabled = 0
 
-      -- Use TeXpresso as the compiler for this initial test
+      -- Use Sioyek mode by default
       vim.g.latex_viewer_mode = vim.g.latex_viewer_mode or "sioyek"
 
       vim.g.vimtex_compiler_method =
@@ -42,7 +42,7 @@ return {
         },
       }
 
-      -- Keep Sioyek available as the normal PDF viewer
+      -- Use the general viewer backend to avoid an extra cmd window on Windows
       vim.g.vimtex_view_method = "general"
       vim.g.vimtex_view_general_viewer = 'start ""'
 
