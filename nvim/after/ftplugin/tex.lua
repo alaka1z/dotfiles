@@ -58,24 +58,37 @@ map("n", "<leader>tk", "<cmd>VimtexStop<cr>", {
   desc = "Stop compiler",
 })
 
-map("n", "<leader>tf", function()
-  vim.cmd("call b:vimtex.compiler.texpresso_synctex_forward_toggle()")
-end, {
-  buffer = true,
-  desc = "Toggle TeXpresso follow",
-})
+local function set_mode_mappings()
+  local buffer = vim.api.nvim_get_current_buf()
 
-map("n", "<leader>tt", function()
-  vim.system({
-    "pwsh.exe",
-    "-NoProfile",
-    "-File",
-    vim.fn.expand("~/.config/texpresso/texpresso-toggle-titlebar.ps1"),
+  pcall(vim.keymap.del, "n", "<leader>tf", { buffer = buffer })
+  pcall(vim.keymap.del, "n", "<leader>tt", { buffer = buffer })
+
+  if vim.g.latex_viewer_mode ~= "texpresso" then
+    return
+  end
+
+  map("n", "<leader>tf", function()
+    vim.cmd("call b:vimtex.compiler.texpresso_synctex_forward_toggle()")
+  end, {
+    buffer = true,
+    desc = "Toggle TeXpresso follow",
   })
-end, {
-  buffer = true,
-  desc = "Toggle TeXpresso titlebar",
-})
+
+  map("n", "<leader>tt", function()
+    vim.system({
+      "pwsh.exe",
+      "-NoProfile",
+      "-File",
+      vim.fn.expand(
+        "~/.config/texpresso/texpresso-toggle-titlebar.ps1"
+      ),
+    })
+  end, {
+    buffer = true,
+    desc = "Toggle TeXpresso titlebar",
+  })
+end
 
 map("n", "<leader>tm", function()
   vim.cmd("VimtexStop")
@@ -89,6 +102,7 @@ map("n", "<leader>tm", function()
   end
 
   vim.cmd("VimtexReload")
+  set_mode_mappings()
 
   vim.notify(
     "LaTeX mode: " .. vim.g.latex_viewer_mode
@@ -97,3 +111,5 @@ end, {
   buffer = true,
   desc = "Switch LaTeX mode",
 })
+
+set_mode_mappings()
