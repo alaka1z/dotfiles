@@ -26,8 +26,8 @@ return {
           {
             function()
               return vim.g.latex_viewer_mode == "texpresso"
-              and "TeXpresso"
-              or "Sioyek"
+              and vim.fn.nr2char(0x100001)
+              or vim.fn.nr2char(0x100000)
             end,
 
             cond = function()

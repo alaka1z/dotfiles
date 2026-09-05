@@ -82,7 +82,14 @@ config.keys = {
 -- Appearance
 
 -- Main terminal font
-config.font = wezterm.font("JetBrainsMono Nerd Font Mono")
+config.font = wezterm.font_with_fallback({
+  "JetBrainsMono Nerd Font Mono",
+  {
+    family = "CustomGlyphs",
+    scale = 1.5,
+  },
+})
+
 config.font_size = 12.0
 
 -- Background opacity
