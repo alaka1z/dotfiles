@@ -109,7 +109,16 @@ local function sync_mode()
   local expected_compiler = compiler_for_mode()
 
   if vim.b.vimtex.compiler.name ~= expected_compiler then
-    vim.cmd("VimtexStop")
+    local previous_compiler = vim.b.vimtex.compiler.name
+
+    if vim.fn.eval("b:vimtex.compiler.is_running()") == 1 then
+      vim.cmd("VimtexStop")
+    end
+
+    if previous_compiler == "texpresso" then
+      vim.cmd("call b:vimtex.compiler.texpresso_cleanup()")
+    end
+
     vim.g.vimtex_compiler_method = expected_compiler
     vim.cmd("VimtexReload")
   end
