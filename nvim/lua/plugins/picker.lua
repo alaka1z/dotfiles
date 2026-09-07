@@ -93,14 +93,7 @@ return {
       {
         "<leader>st",
         function()
-          require("fzf-lua").colorschemes({
-            colors = {
-              "catppuccin-mocha",
-              "tokyonight-moon",
-              "gruvbox",
-              "rose-pine",
-            },
-          })
+          require("theme-sync").pick()
         end,
         desc = "Themes",
       },

@@ -102,8 +102,6 @@ config.font_size = 12.0
 -- config.window_background_opacity = 0.5
 -- config.text_background_opacity = 0.5
 
-config.color_scheme = "Catppuccin Mocha"
-
 -- Thin blinking vertical cursor
 config.default_cursor_style = "BlinkingBar"
 
