@@ -16,3 +16,66 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end
   end,
 })
+
+local function apply_theme_transparency()
+  local normal = vim.api.nvim_get_hl(0, {
+    name = "Normal",
+    link = false,
+  })
+
+  if normal.bg then
+    vim.api.nvim_set_hl(0, "ThemeNormal", {
+      fg = normal.fg,
+      bg = normal.bg,
+    })
+  end
+
+  local transparent_groups = {
+    "Normal",
+    "NormalNC",
+    "SignColumn",
+    "EndOfBuffer",
+  }
+
+  for _, group in ipairs(transparent_groups) do
+    vim.api.nvim_set_hl(0, group, {
+      bg = "NONE",
+      update = true,
+    })
+  end
+
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "ThemeReady",
+  })
+end
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  group = vim.api.nvim_create_augroup(
+    "theme_transparency",
+    { clear = true }
+  ),
+  callback = apply_theme_transparency,
+})
+
+vim.schedule(apply_theme_transparency)
+
+vim.api.nvim_create_autocmd("User", {
+  pattern = "ThemeReady",
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if
+        vim.api.nvim_buf_is_loaded(buf)
+        and vim.bo[buf].filetype == "tex"
+      then
+        vim.api.nvim_buf_call(buf, function()
+          vim.cmd([[
+            if exists('b:vimtex.compiler')
+                  \ && has_key(b:vimtex.compiler, 'texpresso_theme')
+              call b:vimtex.compiler.texpresso_theme()
+            endif
+          ]])
+        end)
+      end
+    end
+  end,
+})

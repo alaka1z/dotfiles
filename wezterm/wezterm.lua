@@ -56,27 +56,6 @@ config.keys = {
             window:maximize()
         end),
     },
-
-    -- Work around a Windows title-bar flash when returning to fullscreen
-    --
-    -- Enter fullscreen from a normally decorated window, then restore the
-    -- titleless RESIZE configuration while leaving fullscreen
-    -- {
-    --     key = "Enter",
-    --     mods = "ALT",
-    --     action = wezterm.action_callback(function(window, pane)
-    --         local overrides = window:get_config_overrides() or {}
-    --
-    --         if window:get_dimensions().is_full_screen then
-    --             overrides.window_decorations = "RESIZE"
-    --         else
-    --             overrides.window_decorations = "TITLE|RESIZE"
-    --         end
-    --
-    --         window:set_config_overrides(overrides)
-    --         window:perform_action(wezterm.action.ToggleFullScreen, pane)
-    --     end),
-    -- },
 }
 
 -- Appearance
@@ -93,8 +72,8 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 12.0
 
 -- Background opacity
--- config.window_background_opacity = 0.5
--- config.text_background_opacity = 0.5
+config.window_background_opacity = 0.8
+config.text_background_opacity = 0.8
 
 config.color_scheme = "Catppuccin Mocha"
 

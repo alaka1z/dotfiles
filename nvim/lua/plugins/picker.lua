@@ -1,6 +1,7 @@
 return {
   {
     "ibhagwan/fzf-lua",
+    cmd = "FzfLua",
     opts = {
       "telescope",
 
@@ -17,6 +18,17 @@ return {
       -- Hide the extra details column in the keymaps picker
       keymaps = {
         show_details = false,
+      },
+
+      -- Only show colorschemes we explicitly support
+      colorschemes = {
+        colors = {
+          "catppuccin",
+          "tokyonight",
+          "kanagawa",
+          "gruvbox",
+          -- "rose-pine",
+        },
       },
 
       -- Show spelling suggestions in a small picker near the cursor
@@ -89,6 +101,11 @@ return {
         "<leader>sb",
         "<cmd>FzfLua builtin<cr>",
         desc = "Builtins",
+      },
+      {
+        "<leader>st",
+        "<cmd>FzfLua colorschemes<cr>",
+        desc = "Themes",
       },
     },
   },

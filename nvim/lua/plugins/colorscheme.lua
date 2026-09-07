@@ -3,18 +3,36 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
 
-    -- Load the colorscheme before other UI plugins
+    -- Load the default colorscheme before other UI plugins
     priority = 1000,
 
     config = function()
       require("catppuccin").setup({
         flavour = "mocha",
-
-        -- Let WezTerm provide the terminal background
-        transparent_background = true,
       })
 
       vim.cmd.colorscheme("catppuccin")
     end,
+  },
+
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+  },
+
+  {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+  },
+
+  {
+    "ellisonleao/gruvbox.nvim",
+    lazy = false,
+  },
+
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    lazy = false,
   },
 }
