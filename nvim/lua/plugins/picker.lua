@@ -90,6 +90,20 @@ return {
         "<cmd>FzfLua builtin<cr>",
         desc = "Builtins",
       },
+      {
+        "<leader>st",
+        function()
+          require("fzf-lua").colorschemes({
+            colors = {
+              "catppuccin-mocha",
+              "tokyonight-moon",
+              "gruvbox",
+              "rose-pine",
+            },
+          })
+        end,
+        desc = "Themes",
+      },
     },
   },
 }

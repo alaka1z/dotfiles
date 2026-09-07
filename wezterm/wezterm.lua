@@ -1,6 +1,12 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+local theme_sync = wezterm.plugin.require(
+  "file:///" .. wezterm.home_dir:gsub("\\", "/") .. "/dev/theme-sync.nvim"
+)
+
+theme_sync.apply_to_config(config)
+
 -- Behaviour
 
 -- Set the default opening size

@@ -11,10 +11,23 @@ return {
         flavour = "mocha",
 
         -- Let WezTerm provide the terminal background
-        transparent_background = true,
+        -- transparent_background = true,
       })
 
-      vim.cmd.colorscheme("catppuccin")
+      vim.cmd.colorscheme("catppuccin-mocha")
     end,
+  },
+
+  {
+    "folke/tokyonight.nvim",
+  },
+
+  {
+    "ellisonleao/gruvbox.nvim",
+  },
+
+  {
+    "rose-pine/neovim",
+    name = "rose-pine",
   },
 }
