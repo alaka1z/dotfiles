@@ -16,3 +16,26 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end
   end,
 })
+
+local theme_ids = {
+  ["catppuccin-mocha"] = "catppuccin",
+  ["tokyonight-moon"] = "tokyonight",
+  gruvbox = "gruvbox",
+  ["rose-pine"] = "rose-pine",
+}
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function()
+    local theme = theme_ids[vim.g.colors_name]
+
+    if not theme then
+      return
+    end
+
+    vim.api.nvim_ui_send(
+      ("\27]1337;SetUserVar=NVIM_THEME_TEST=%s\7"):format(
+        vim.base64.encode(theme)
+      )
+    )
+  end,
+})

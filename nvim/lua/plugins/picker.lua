@@ -4,6 +4,27 @@ return {
     opts = {
       "telescope",
 
+      colorschemes = {
+        colors = {
+          "catppuccin-mocha",
+          "tokyonight-moon",
+          "gruvbox",
+          "rose-pine",
+        },
+
+        actions = {
+          ["enter"] = function(selected, opts)
+            require("fzf-lua.actions").colorscheme(selected, opts)
+
+            local theme = vim.g.colors_name
+            local path = vim.fn.stdpath("state") .. "/theme-sync-test"
+
+            vim.fn.writefile({ theme }, path)
+            vim.notify("Saved theme: " .. theme)
+          end,
+        },
+      },
+
       -- Hide picker title flags such as the hidden-files indicator
       winopts = {
         title_flags = false,
@@ -89,6 +110,11 @@ return {
         "<leader>sb",
         "<cmd>FzfLua builtin<cr>",
         desc = "Builtins",
+      },
+      {
+        "<leader>st",
+        "<cmd>FzfLua colorschemes<cr>",
+        desc = "Themes",
       },
     },
   },

@@ -93,10 +93,10 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 12.0
 
 -- Background opacity
--- config.window_background_opacity = 0.5
--- config.text_background_opacity = 0.5
+-- config.window_background_opacity = 0.9
+-- config.text_background_opacity = 0.9
 
-config.color_scheme = "Catppuccin Mocha"
+-- config.color_scheme = "Catppuccin Mocha"
 
 -- Thin blinking vertical cursor
 config.default_cursor_style = "BlinkingBar"
@@ -118,5 +118,91 @@ config.default_cursor_style = "BlinkingBar"
 
 -- Alternative cursor style:
 -- config.default_cursor_style = "BlinkingBlock"
+
+local theme_schemes = {
+    catppuccin = "Catppuccin Mocha",
+    tokyonight = "Tokyo Night Moon",
+    gruvbox = "GruvboxDark",
+    ["rose-pine"] = "rose-pine",
+}
+
+local theme = "catppuccin-mocha"
+
+local local_appdata = os.getenv("LOCALAPPDATA")
+
+if local_appdata then
+    local path = local_appdata .. "\\nvim-data\\theme-sync-test"
+    local file = io.open(path, "r")
+
+    if file then
+        local saved = file:read("*l")
+        file:close()
+
+        if saved and theme_schemes[saved] then
+            theme = saved
+        end
+    end
+end
+
+config.color_scheme = theme_schemes[theme]
+
+local function apply_dynamic_scheme(pane, scheme_name)
+    local schemes = wezterm.color.get_builtin_schemes()
+    local scheme = schemes[scheme_name]
+
+    if not scheme then
+        wezterm.log_error("Unknown color scheme: " .. scheme_name)
+        return
+    end
+
+    local sequences = {}
+
+    -- ANSI colors 0-7
+    for i, color in ipairs(scheme.ansi or {}) do
+        table.insert(
+            sequences,
+            string.format("\27]4;%d;%s\27\\", i - 1, color)
+        )
+    end
+
+    -- Bright ANSI colors 8-15
+    for i, color in ipairs(scheme.brights or {}) do
+        table.insert(
+            sequences,
+            string.format("\27]4;%d;%s\27\\", i + 7, color)
+        )
+    end
+
+    if scheme.foreground then
+        table.insert(sequences, "\27]10;" .. scheme.foreground .. "\27\\")
+    end
+
+    if scheme.background then
+        table.insert(sequences, "\27]11;" .. scheme.background .. "\27\\")
+    end
+
+    local cursor = scheme.cursor_bg or scheme.cursor_border
+
+    if cursor then
+        table.insert(sequences, "\27]12;" .. cursor .. "\27\\")
+    end
+
+    pane:inject_output(table.concat(sequences))
+end
+
+wezterm.on("user-var-changed", function(window, pane, name, value)
+    if name ~= "NVIM_THEME_TEST" then
+        return
+    end
+
+    local scheme_name = theme_schemes[value]
+
+    if not scheme_name then
+        wezterm.log_error("Unknown theme: " .. value)
+        return
+    end
+
+    apply_dynamic_scheme(pane, scheme_name)
+end)
 
 return config
