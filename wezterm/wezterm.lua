@@ -54,6 +54,19 @@ wezterm.on("format-tab-title", function(tab)
     return " " .. tab.active_pane.title .. " "
 end)
 
+local function adjust_opacity(window, amount)
+    local overrides = window:get_config_overrides() or {}
+    local opacity = window:effective_config().window_background_opacity
+
+    opacity = math.max(0.1, math.min(1.0, opacity + amount))
+    opacity = math.floor(opacity * 20 + 0.5) / 20
+
+    overrides.window_background_opacity = opacity
+    overrides.text_background_opacity = opacity
+
+    window:set_config_overrides(overrides)
+end
+
 config.keys = {
     -- Type ~ on keyboards without a dedicated tilde key
     {
@@ -68,6 +81,24 @@ config.keys = {
         mods = "ALT",
         action = wezterm.action_callback(function(window)
             window:maximize()
+        end),
+    },
+
+    -- Increase terminal opacity
+    {
+        key = "+",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action_callback(function(window)
+            adjust_opacity(window, 0.05)
+        end),
+    },
+
+    -- Decrease terminal opacity
+    {
+        key = "_",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action_callback(function(window)
+            adjust_opacity(window, -0.05)
         end),
     },
 }
