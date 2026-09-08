@@ -10,6 +10,11 @@ function config {
     Set-Location "$HOME\.config"
 }
 
+# Jump to the main configuration directory
+function dev {
+    Set-Location "$HOME\dev"
+}
+
 # Reload the PowerShell configuration in the current session
 function reload {
     . $PROFILE
