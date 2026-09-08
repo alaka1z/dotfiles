@@ -1,3 +1,4 @@
+-- Order controls the picker, with the first theme used as the fallback
 return {
   {
     id = "catppuccin",
@@ -6,9 +7,9 @@ return {
   },
 
   {
-    id = "tokyonight",
-    nvim = "tokyonight-moon",
-    wezterm = "Tokyo Night Moon",
+    id = "rose_pine",
+    nvim = "rose-pine",
+    wezterm = "rose-pine",
   },
 
   {
@@ -18,8 +19,14 @@ return {
   },
 
   {
-    id = "rose_pine",
-    nvim = "rose-pine",
-    wezterm = "rose-pine",
+    id = "gruvbox_material",
+    nvim = "gruvbox-material",
+    wezterm = "Gruvbox Material (Gogh)",
+  },
+
+  {
+    id = "tokyonight",
+    nvim = "tokyonight-moon",
+    wezterm = "Tokyo Night Moon",
   },
 }

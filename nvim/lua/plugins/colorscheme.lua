@@ -1,31 +1,8 @@
 return {
-  {
-    "catppuccin/nvim",
-    name = "catppuccin",
+  { "catppuccin/nvim", name = "catppuccin" },
+  { "rose-pine/neovim", name = "rose-pine" },
 
-    -- Load the colorscheme before other UI plugins
-    priority = 1000,
-
-    config = function()
-      require("catppuccin").setup({
-        flavour = "mocha",
-
-        -- Let WezTerm provide the terminal background
-        -- transparent_background = true,
-      })
-    end,
-  },
-
-  {
-    "folke/tokyonight.nvim",
-  },
-
-  {
-    "ellisonleao/gruvbox.nvim",
-  },
-
-  {
-    "rose-pine/neovim",
-    name = "rose-pine",
-  },
+  "folke/tokyonight.nvim",
+  "ellisonleao/gruvbox.nvim",
+  "sainnhe/gruvbox-material",
 }

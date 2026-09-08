@@ -1,11 +1,19 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+local home = wezterm.home_dir:gsub("\\", "/")
+
 local theme_sync = wezterm.plugin.require(
-  "file:///" .. wezterm.home_dir:gsub("\\", "/") .. "/dev/theme-sync.nvim"
+  "https://github.com/alaka1z/theme-sync.nvim"
 )
 
-theme_sync.apply_to_config(config)
+local themes = dofile(
+  home .. "/.config/theme-sync/themes.lua"
+)
+
+theme_sync.apply_to_config(config, {
+  themes = themes,
+})
 
 -- Behaviour
 

@@ -1,12 +1,6 @@
 return {
   {
-    dir = vim.fn.expand("~/dev/theme-sync.nvim"),
-    name = "theme-sync.nvim",
-    lazy = false,
-
-    dependencies = {
-      "ibhagwan/fzf-lua",
-    },
+    "alaka1z/theme-sync.nvim",
 
     config = function()
       local themes = dofile(
