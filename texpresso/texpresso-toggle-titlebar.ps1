@@ -15,17 +15,18 @@ public static class TexPressoTitlebar {
     }
 
     const int GWL_STYLE = -16;
-    const uint WS_CAPTION = 0x00C00000;
+
+    const long WS_CAPTION = 0x00C00000;
 
     const uint SWP_NOZORDER     = 0x0004;
     const uint SWP_NOACTIVATE   = 0x0010;
     const uint SWP_FRAMECHANGED = 0x0020;
 
-    const string HiddenProperty = "TexPressoTitlebarHidden";
-    const string StyleProperty  = "TexPressoOriginalStyle";
-
     [DllImport("user32.dll")]
-    static extern bool EnumWindows(EnumWindowsProc callback, IntPtr lParam);
+    static extern bool EnumWindows(
+        EnumWindowsProc callback,
+        IntPtr lParam
+    );
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     static extern int GetWindowText(
@@ -34,14 +35,24 @@ public static class TexPressoTitlebar {
         int count
     );
 
-    [DllImport("user32.dll")]
-    static extern int GetWindowLong(IntPtr hWnd, int index);
+    [DllImport("user32.dll", EntryPoint = "GetWindowLongPtrW")]
+    static extern IntPtr GetWindowLongPtr(
+        IntPtr hWnd,
+        int index
+    );
+
+    [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
+    static extern IntPtr SetWindowLongPtr(
+        IntPtr hWnd,
+        int index,
+        IntPtr value
+    );
 
     [DllImport("user32.dll")]
-    static extern int SetWindowLong(IntPtr hWnd, int index, int value);
-
-    [DllImport("user32.dll")]
-    static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
+    static extern bool GetWindowRect(
+        IntPtr hWnd,
+        out RECT rect
+    );
 
     [DllImport("user32.dll")]
     static extern bool SetWindowPos(
@@ -54,21 +65,17 @@ public static class TexPressoTitlebar {
         uint flags
     );
 
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    static extern bool SetProp(IntPtr hWnd, string name, IntPtr value);
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    static extern IntPtr GetProp(IntPtr hWnd, string name);
-
-    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-    static extern IntPtr RemoveProp(IntPtr hWnd, string name);
-
     static IntPtr FindWindow() {
         IntPtr result = IntPtr.Zero;
 
         EnumWindows((hWnd, lParam) => {
             var title = new StringBuilder(512);
-            GetWindowText(hWnd, title, title.Capacity);
+
+            GetWindowText(
+                hWnd,
+                title,
+                title.Capacity
+            );
 
             if (title.ToString().StartsWith("TeXpresso")) {
                 result = hWnd;
@@ -85,41 +92,37 @@ public static class TexPressoTitlebar {
         IntPtr hWnd = FindWindow();
 
         if (hWnd == IntPtr.Zero) {
-            throw new Exception("No TeXpresso window found");
+            throw new Exception(
+                "No TeXpresso window found"
+            );
         }
 
         RECT rect;
-        GetWindowRect(hWnd, out rect);
 
-        int width = rect.Right - rect.Left;
-        int height = rect.Bottom - rect.Top;
-
-        int style = GetWindowLong(hWnd, GWL_STYLE);
-        bool hidden = GetProp(hWnd, HiddenProperty) != IntPtr.Zero;
-
-        uint newStyle;
-
-        if (!hidden) {
-            SetProp(hWnd, StyleProperty, new IntPtr(style));
-            SetProp(hWnd, HiddenProperty, new IntPtr(1));
-
-            newStyle = unchecked((uint)style) & ~WS_CAPTION;
-        }
-        else {
-            IntPtr original = GetProp(hWnd, StyleProperty);
-
-            newStyle = original != IntPtr.Zero
-                ? unchecked((uint)original.ToInt32())
-                : unchecked((uint)style) | WS_CAPTION;
-
-            RemoveProp(hWnd, HiddenProperty);
-            RemoveProp(hWnd, StyleProperty);
+        if (!GetWindowRect(hWnd, out rect)) {
+            throw new Exception(
+                "Could not read TeXpresso window geometry"
+            );
         }
 
-        SetWindowLong(
+        long style =
+            GetWindowLongPtr(
+                hWnd,
+                GWL_STYLE
+            ).ToInt64();
+
+        bool hasCaption =
+            (style & WS_CAPTION) != 0;
+
+        long newStyle =
+            hasCaption
+                ? style & ~WS_CAPTION
+                : style | WS_CAPTION;
+
+        SetWindowLongPtr(
             hWnd,
             GWL_STYLE,
-            unchecked((int)newStyle)
+            new IntPtr(newStyle)
         );
 
         SetWindowPos(
@@ -127,8 +130,8 @@ public static class TexPressoTitlebar {
             IntPtr.Zero,
             rect.Left,
             rect.Top,
-            width,
-            height,
+            rect.Right - rect.Left,
+            rect.Bottom - rect.Top,
             SWP_NOZORDER |
             SWP_NOACTIVATE |
             SWP_FRAMECHANGED
