@@ -68,6 +68,50 @@ local function build_sioyek_pdf()
   end)
 end
 
+-- Browse installed TeX packages and insert the selected package
+local function tex_packages()
+  local packages = vim.fn.systemlist({
+    "wsl.exe",
+    "-d",
+    "Ubuntu-24.04",
+    "--",
+    "bash",
+    "-lc",
+    [[find "$(kpsewhich -var-value=TEXMFDIST)/tex" -type f -name "*.sty" -printf "%f\n" | sed "s/\.sty$//" | sort -fu]],
+  })
+
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Failed to read TeX packages from WSL", vim.log.levels.ERROR)
+    return
+  end
+
+  require("fzf-lua").fzf_exec(packages, {
+    prompt = "TeX Packages> ",
+    actions = {
+      ["default"] = function(selected)
+        local package = selected[1]
+        if not package then
+          return
+        end
+
+        local row = vim.api.nvim_win_get_cursor(0)[1]
+        local blank = vim.api.nvim_get_current_line():match("^%s*$")
+        local index = blank and row - 1 or row
+
+        vim.api.nvim_buf_set_lines(
+          0,
+          index,
+          blank and row or index,
+          false,
+          { "\\usepackage{" .. package .. "}", "" }
+        )
+
+        vim.api.nvim_win_set_cursor(0, { index + 2, 0 })
+      end,
+    },
+  })
+end
+
 -- Add TeXpresso-only mappings so they reflect the active mode in Which-Key
 local function set_mode_mappings()
   pcall(vim.keymap.del, "n", "<leader>tf", { buffer = true })
@@ -168,7 +212,12 @@ map("n", "<leader>tc", "<cmd>VimtexTocOpen<cr>", {
 
 map("n", "<leader>tm", switch_mode, {
   buffer = true,
-  desc = "Switch LaTeX mode",
+  desc = "Switch TeX mode",
+})
+
+map("n", "<leader>tp", tex_packages, {
+  buffer = true,
+  desc = "TeX packages",
 })
 
 -- Synchronize each TeX project lazily when returning to its buffer
