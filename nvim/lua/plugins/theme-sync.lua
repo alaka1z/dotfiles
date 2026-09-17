@@ -9,6 +9,15 @@ return {
 
       require("theme-sync").setup({
         themes = themes,
+
+        on_theme_changed = function()
+          vim.system({
+            "pwsh.exe",
+            "-NoProfile",
+            "-File",
+            vim.fn.expand("~/.config/glazewm/theme-sync.ps1"),
+          })
+        end,
       })
     end,
   },
