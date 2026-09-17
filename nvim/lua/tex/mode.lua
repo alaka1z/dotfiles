@@ -1,9 +1,7 @@
 local M = {}
 
 local function compiler_for_mode()
-  return vim.g.latex_viewer_mode == "texpresso"
-      and "texpresso"
-      or "latexmk"
+  return vim.g.latex_viewer_mode == "texpresso" and "texpresso" or "latexmk"
 end
 
 function M.view()
@@ -52,44 +50,42 @@ function M.build_sioyek_pdf()
     filename,
   }, {
     cwd = cwd,
-  }, function(result)
+  }, vim.schedule_wrap(function(result)
     if result.code ~= 0 then
-      vim.schedule(function()
-        vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
-      end)
+      vim.notify("XeLaTeX build failed", vim.log.levels.ERROR)
     end
-  end)
+  end))
 end
 
 -- Keep VimTeX's per-buffer compiler aligned with the global LaTeX mode
 function M.sync()
-  if not vim.b.vimtex or not vim.b.vimtex.compiler then
+  local compiler = vim.b.vimtex and vim.b.vimtex.compiler
+
+  if not compiler then
     return
   end
 
-  local expected_compiler = compiler_for_mode()
+  local expected = compiler_for_mode()
 
-  if vim.b.vimtex.compiler.name ~= expected_compiler then
-    local previous_compiler = vim.b.vimtex.compiler.name
-
-    if vim.fn.eval("b:vimtex.compiler.is_running()") == 1 then
-      vim.cmd("VimtexStop")
-    end
-
-    if previous_compiler == "texpresso" then
-      vim.cmd("call b:vimtex.compiler.texpresso_cleanup()")
-    end
-
-    vim.g.vimtex_compiler_method = expected_compiler
-    vim.cmd("VimtexReload")
+  if compiler.name == expected then
+    return
   end
+
+  if vim.fn.eval("b:vimtex.compiler.is_running()") == 1 then
+    vim.cmd("VimtexStop")
+  end
+
+  if compiler.name == "texpresso" then
+    vim.cmd("call b:vimtex.compiler.texpresso_cleanup()")
+  end
+
+  vim.g.vimtex_compiler_method = expected
+  vim.cmd("VimtexReload")
 end
 
 function M.switch()
   vim.g.latex_viewer_mode =
-    vim.g.latex_viewer_mode == "sioyek"
-      and "texpresso"
-      or "sioyek"
+    vim.g.latex_viewer_mode == "sioyek" and "texpresso" or "sioyek"
 
   vim.g.vimtex_compiler_method = compiler_for_mode()
 
