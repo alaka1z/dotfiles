@@ -94,4 +94,11 @@ function M.switch()
   vim.notify("LaTeX mode: " .. vim.g.latex_viewer_mode)
 end
 
+function M.open_texpresso_log()
+  local path =
+    [[\\wsl.localhost\Ubuntu-24.04\home\alaka\.cache\texpresso\texpresso.log]]
+
+  vim.cmd("botright split " .. vim.fn.fnameescape(path))
+end
+
 return M

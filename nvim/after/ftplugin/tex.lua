@@ -10,16 +10,27 @@ opt.spell = true
 -- opt.conceallevel = 2
 -- opt.concealcursor = "nc"
 
--- Add TeXpresso-only mappings so they reflect the active mode in Which-Key
+-- Update mode-dependent mappings so they reflect the active mode in Which-Key
 local function set_mode_mappings()
   pcall(vim.keymap.del, "n", "<leader>tf", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tt", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tsb", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tsv", { buffer = true })
+  pcall(vim.keymap.del, "n", "<leader>te", { buffer = true })
+
+  map("n", "<leader>te", "<cmd>VimtexErrors<cr>", {
+    buffer = true,
+    desc = "Errors",
+  })
 
   if vim.g.latex_viewer_mode ~= "texpresso" then
     return
   end
+
+  map("n", "<leader>te", mode.open_texpresso_log, {
+    buffer = true,
+    desc = "TeXpresso log",
+  })
 
   map("n", "<leader>tf", mode.toggle_texpresso_follow, {
     buffer = true,
@@ -64,11 +75,6 @@ map("n", "<leader>v", mode.view, {
 })
 
 -- Less frequent VimTeX actions
-map("n", "<leader>te", "<cmd>VimtexErrors<cr>", {
-  buffer = true,
-  desc = "Errors",
-})
-
 map("n", "<leader>tx", "<cmd>VimtexClean<cr>", {
   buffer = true,
   desc = "Clean",
