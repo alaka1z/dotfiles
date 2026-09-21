@@ -6,6 +6,7 @@ return {
 
     config = function()
       local ls = require("luasnip")
+      local types = require("luasnip.util.types")
       local map = vim.keymap.set
       local function in_mathzone()
         return vim.fn["vimtex#syntax#in_mathzone"]() == 1
@@ -14,6 +15,24 @@ return {
       ls.config.setup({
         enable_autosnippets = true,
         update_events = "TextChanged,TextChangedI",
+        ext_opts = {
+          [types.insertNode] = {
+            active = {
+              virt_text = { { "▸", "Comment" } },
+              virt_text_pos = "inline",
+            },
+            passive = {
+              virt_text = { { "·", "Comment" } },
+              virt_text_pos = "inline",
+            },
+          },
+          [types.exitNode] = {
+            unvisited = {
+              virt_text = { { "·", "Comment" } },
+              virt_text_pos = "inline",
+            },
+          },
+        },
       })
 
       local function load_snippets()
@@ -48,20 +67,6 @@ return {
       load_snippets()
 
       vim.api.nvim_create_user_command("SnippetsReload", load_snippets, {})
-
-      -- ls.add_snippets("tex", build.build(require("snippets.tex")), {
-      --   key = "tex",
-      -- })
-      --
-      -- ls.add_snippets("tex", build.build(require("snippets.math"), {
-      --   condition = in_mathzone,
-      -- }), {
-      --   key = "math",
-      -- })
-      --
-      -- ls.add_snippets("tex", require("snippets.advanced"), {
-      --   key = "advanced",
-      -- })
 
       -- Expand snippets and move forward through their fields
       map({ "i", "s" }, "<Tab>", function()
