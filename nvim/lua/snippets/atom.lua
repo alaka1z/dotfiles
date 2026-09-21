@@ -61,24 +61,35 @@ function M.previous(text)
   if char == "}" then
     start = matching_open(text, pos)
 
-  -- Ordinary identifier / LaTeX control sequence
-  elseif char:match("[%w%.%-]") then
-    start = pos
+  elseif char:match("%a") then
+    local command_start = pos
 
-    while start > 1
-        and text:sub(start - 1, start - 1):match("[%w%.%-]") do
-      start = start - 1
+    while command_start > 1
+      and text:sub(command_start - 1, command_start - 1):match("%a") do
+      command_start = command_start - 1
     end
 
-    -- Include the leading backslash of \alpha, \beta, etc.
-    if start > 1
-        and text:sub(start - 1, start - 1) == "\\"
-        and text:sub(start, pos):match("^%a+$") then
+    -- A control sequence like \alpha is one atom
+    if command_start > 1
+      and text:sub(command_start - 1, command_start - 1) == "\\" then
+      start = command_start - 1
+
+      -- An ordinary variable is only one letter
+    else
+      start = pos
+    end
+
+  elseif char:match("%d") then
+    start = pos
+
+    -- Keep multi-digit numbers together
+    while start > 1
+      and text:sub(start - 1, start - 1):match("%d") do
       start = start - 1
     end
 
   else
-    start = pos
+    return nil
   end
 
   return text:sub(start, finish)

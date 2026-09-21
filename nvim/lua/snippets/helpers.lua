@@ -43,7 +43,9 @@ function M.inword_auto(trigger, body, opts)
     trig = trigger,
     wordTrig = false,
     snippetType = "autosnippet",
-  }), body)
+  }), body, {
+    dedent = false,
+  })
 end
 
 function M.regex_auto(trigger, format, opts)
@@ -58,17 +60,18 @@ function M.regex_auto(trigger, format, opts)
   })
 end
 
--- function M.postfix_auto(trigger, format, opts)
---   return postfix(vim.tbl_extend("force", opts or {}, {
---     trig = trigger,
---     match_pattern = "\\?[%w%.%_%-]+$",
---     snippetType = "autosnippet",
---   }), {
---     ls.function_node(function(_, parent)
---       return string.format(format, parent.snippet.env.POSTFIX_MATCH)
---     end, {}),
---   })
--- end
+function M.inword_regex_auto(trigger, format, opts)
+  return ls.snippet(vim.tbl_extend("force", opts or {}, {
+    trig = trigger,
+    trigEngine = "pattern",
+    wordTrig = false,
+    snippetType = "autosnippet",
+  }), {
+    ls.function_node(function(_, snip)
+      return string.format(format, unpack(snip.captures))
+    end),
+  })
+end
 
 -- Use our own definition of atom
 function M.postfix_auto(trigger, format, opts)
@@ -83,5 +86,7 @@ function M.postfix_auto(trigger, format, opts)
     end, {}),
   })
 end
+
+
 
 return M
