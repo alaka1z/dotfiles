@@ -12,6 +12,12 @@ opt.spell = true
 
 -- Update mode-dependent mappings so they reflect the active mode in Which-Key
 local function set_mode_mappings()
+  local current_mode = vim.g.latex_viewer_mode
+
+  if vim.b.latex_mapping_mode == current_mode then
+    return
+  end
+
   pcall(vim.keymap.del, "n", "<leader>tf", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tt", { buffer = true })
   pcall(vim.keymap.del, "n", "<leader>tsb", { buffer = true })
@@ -23,34 +29,34 @@ local function set_mode_mappings()
     desc = "Errors",
   })
 
-  if vim.g.latex_viewer_mode ~= "texpresso" then
-    return
+  if current_mode == "texpresso" then
+    map("n", "<leader>te", mode.open_texpresso_log, {
+      buffer = true,
+      desc = "TeXpresso log",
+    })
+
+    map("n", "<leader>tf", mode.toggle_texpresso_follow, {
+      buffer = true,
+      desc = "Toggle TeXpresso follow",
+    })
+
+    map("n", "<leader>tt", mode.toggle_texpresso_titlebar, {
+      buffer = true,
+      desc = "Toggle TeXpresso titlebar",
+    })
+
+    map("n", "<leader>tsb", mode.build_sioyek_pdf, {
+      buffer = true,
+      desc = "Build PDF with Sioyek",
+    })
+
+    map("n", "<leader>tsv", "<cmd>VimtexView<cr>", {
+      buffer = true,
+      desc = "View in Sioyek",
+    })
   end
 
-  map("n", "<leader>te", mode.open_texpresso_log, {
-    buffer = true,
-    desc = "TeXpresso log",
-  })
-
-  map("n", "<leader>tf", mode.toggle_texpresso_follow, {
-    buffer = true,
-    desc = "Toggle TeXpresso follow",
-  })
-
-  map("n", "<leader>tt", mode.toggle_texpresso_titlebar, {
-    buffer = true,
-    desc = "Toggle TeXpresso titlebar",
-  })
-
-  map("n", "<leader>tsb", mode.build_sioyek_pdf, {
-    buffer = true,
-    desc = "Build PDF with Sioyek",
-  })
-
-  map("n", "<leader>tsv", "<cmd>VimtexView<cr>", {
-    buffer = true,
-    desc = "View in Sioyek",
-  })
+  vim.b.latex_mapping_mode = current_mode
 end
 
 local function sync_mode()

@@ -3,6 +3,10 @@ return {
     "folke/which-key.nvim",
     event = "VeryLazy",
     opts = {
+      delay = 0,
+      triggers = {
+        { "<leader>", mode = "n" },
+      },
       spec = {
         { "<leader>f", group = "Find", icon = "󰈞" },
         { "<leader>g", group = "Git" },
