@@ -10,9 +10,14 @@ function config {
     Set-Location "$HOME\.config"
 }
 
-# Jump to the main configuration directory
+# Jump to the development directory
 function dev {
     Set-Location "$HOME\dev"
+}
+
+# Jump to the windows documents directory
+function doc {
+    Set-Location "$HOME\Documents"
 }
 
 # Reload the PowerShell configuration in the current session
