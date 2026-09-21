@@ -10,9 +10,13 @@ return {
   inword_auto = {
     { "=", " = " },
     { "+", " + " },
+    { ">", " > " },
+    { "<", " < " },
     { "pm", " \\pm " },
     { "sr", "^2" },
     { "cb", "^3" },
+    { "tp", "^{$1}$0" },
+    { "sb", "_{$1}$0" },
     { "abs", "\\left|$1\\right|$0" },
     { "sin", "\\sin{$1}$0" },
     { "cos", "\\cos{$1}$0" },
@@ -31,9 +35,6 @@ return {
     { "pi", "\\pi" },
     { "th", "\\theta" },
     { "ff", "\\frac{$1}{$2}$0" },
-    { "ne", " \\neq " },
-    { "le", " \\le " },
-    { "ge", " \\ge " },
   },
 
   regex_auto = {
@@ -53,5 +54,16 @@ return {
     { "hat", "\\hat{%s}" },
     { "bar", "\\bar{%s}" },
     { "vec", "\\vec{%s}" },
+
+    { "ii", "%s \\in " },
+    { "ni", "%s \\notin " },
+    { "ss", "%s \\subseteq " },
+    { "cap", "%s \\cap " },
+    { "cup", "%s \\cup " },
+    { "wo", "%s \\setminus " },
+
+    { "ne", "%s \\neq " },
+    { "le", "%s \\le " },
+    { "ge", "%s \\ge " },
   },
 }
