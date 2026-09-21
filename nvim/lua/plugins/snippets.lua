@@ -14,6 +14,7 @@ return {
 
       ls.config.setup({
         enable_autosnippets = true,
+        update_events = "TextChanged,TextChangedI",
       })
 
       ls.add_snippets("tex", build.build(require("snippets.tex")), {
@@ -24,6 +25,10 @@ return {
         condition = in_mathzone,
       }), {
         key = "math",
+      })
+
+      ls.add_snippets("tex", require("snippets.advanced"), {
+        key = "advanced",
       })
 
       -- Expand snippets and move forward through their fields

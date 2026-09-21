@@ -1,7 +1,27 @@
 local ls = require("luasnip")
+local atom = require("snippets.atom")
 
 local parse = ls.parser.parse_snippet
-local postfix = require("luasnip.extras.postfix").postfix
+-- local postfix = require("luasnip.extras.postfix").postfix
+
+local function atom_trigger(trigger)
+  return function(line_to_cursor)
+    if line_to_cursor:sub(-#trigger) ~= trigger then
+      return nil
+    end
+
+    local before =
+      line_to_cursor:sub(1, #line_to_cursor - #trigger)
+
+    local match = atom.previous(before)
+
+    if not match then
+      return nil
+    end
+
+    return match .. trigger, { match }
+  end
+end
 
 local M = {}
 
@@ -38,13 +58,28 @@ function M.regex_auto(trigger, format, opts)
   })
 end
 
+-- function M.postfix_auto(trigger, format, opts)
+--   return postfix(vim.tbl_extend("force", opts or {}, {
+--     trig = trigger,
+--     match_pattern = "\\?[%w%.%_%-]+$",
+--     snippetType = "autosnippet",
+--   }), {
+--     ls.function_node(function(_, parent)
+--       return string.format(format, parent.snippet.env.POSTFIX_MATCH)
+--     end, {}),
+--   })
+-- end
+
+-- Use our own definition of atom
 function M.postfix_auto(trigger, format, opts)
-  return postfix(vim.tbl_extend("force", opts or {}, {
+  return ls.snippet(vim.tbl_extend("force", opts or {}, {
     trig = trigger,
+    trigEngine = atom_trigger,
+    wordTrig = false,
     snippetType = "autosnippet",
   }), {
-    ls.function_node(function(_, parent)
-      return string.format(format, parent.snippet.env.POSTFIX_MATCH)
+    ls.function_node(function(_, snip)
+      return string.format(format, snip.captures[1])
     end, {}),
   })
 end
