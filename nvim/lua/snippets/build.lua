@@ -18,6 +18,7 @@ function M.build(definitions, opts)
   add(snippets, definitions.regex_auto, helpers.regex_auto, opts)
   add(snippets, definitions.inword_regex_auto, helpers.inword_regex_auto, opts)
   add(snippets, definitions.postfix_auto, helpers.postfix_auto, opts)
+  add(snippets, definitions.atom_auto, helpers.atom_auto, opts)
 
   return snippets
 end

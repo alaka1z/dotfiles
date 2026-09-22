@@ -2,7 +2,11 @@ local ls = require("luasnip")
 local atom = require("snippets.atom")
 
 local parse = ls.parser.parse_snippet
--- local postfix = require("luasnip.extras.postfix").postfix
+
+local function previous_atom(line_to_cursor, trigger)
+  local before = line_to_cursor:sub(1, -#trigger - 1)
+  return atom.previous(before)
+end
 
 local function atom_trigger(trigger)
   return function(line_to_cursor)
@@ -10,16 +14,23 @@ local function atom_trigger(trigger)
       return nil
     end
 
-    local before =
-      line_to_cursor:sub(1, #line_to_cursor - #trigger)
-
-    local match = atom.previous(before)
+    local match = previous_atom(line_to_cursor, trigger)
 
     if not match then
       return nil
     end
 
     return match .. trigger, { match }
+  end
+end
+
+local function after_atom_trigger(trigger)
+  return function(line_to_cursor)
+    if line_to_cursor:sub(-#trigger) ~= trigger then
+      return nil
+    end
+
+    return previous_atom(line_to_cursor, trigger) and trigger or nil
   end
 end
 
@@ -87,6 +98,15 @@ function M.postfix_auto(trigger, format, opts)
   })
 end
 
-
+function M.atom_auto(trigger, body, opts)
+  return parse(vim.tbl_extend("force", opts or {}, {
+    trig = trigger,
+    trigEngine = after_atom_trigger,
+    wordTrig = false,
+    snippetType = "autosnippet",
+  }), body, {
+    dedent = false,
+  })
+end
 
 return M
