@@ -40,6 +40,23 @@ local function after_brace(line_to_cursor)
   return line_to_cursor:sub(-3, -3) == "{"
 end
 
+local function euler_coefficient(_, snip)
+  local sign = snip.captures[1] == "m" and "-" or ""
+  local coefficient = snip.captures[2]
+
+  return sign .. (coefficient == "1" and "" or coefficient)
+end
+
+local function optional_slash(args)
+  local denominator = args[1][1]
+
+  if denominator == "" or denominator:sub(1, 1) == "/" then
+    return ""
+  end
+
+  return "/"
+end
+
 return {
   s({
     trig = "mat(%d+)(%d+)",
@@ -119,5 +136,21 @@ return {
     t("("),
     i(0),
     t(")"),
+  }),
+
+  s({
+    trig = "e(m?)([1-9])",
+    trigEngine = "pattern",
+    snippetType = "autosnippet",
+    priority = 2000,
+    condition = in_mathzone,
+  }, {
+    t("e^{"),
+    f(euler_coefficient, {}),
+    t("i\\pi"),
+    f(optional_slash, { 1 }),
+    i(1),
+    t("}"),
+    i(0),
   }),
 }
