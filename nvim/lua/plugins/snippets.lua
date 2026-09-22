@@ -47,6 +47,7 @@ return {
       local function load_snippets()
         for _, module in ipairs({
           "snippets.atom",
+          "snippets.term",
           "snippets.helpers",
           "snippets.build",
           "snippets.tex",

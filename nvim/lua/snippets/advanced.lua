@@ -1,4 +1,6 @@
 local ls = require("luasnip")
+local atom = require("snippets.atom")
+local term = require("snippets.term")
 
 local s, sn = ls.snippet, ls.snippet_node
 local t, i, d, f = ls.text_node, ls.insert_node, ls.dynamic_node, ls.function_node
@@ -55,6 +57,36 @@ local function optional_slash(args)
   end
 
   return "/"
+end
+
+
+local function term_trigger(trigger)
+  return function(line_to_cursor)
+    if line_to_cursor:sub(-#trigger) ~= trigger then
+      return nil
+    end
+
+    local before = line_to_cursor:sub(1, -#trigger - 1)
+    local match = term.previous(before)
+
+    if not match then
+      return nil
+    end
+
+    return match .. trigger, { match }
+  end
+end
+
+local function fraction_numerator(_, snip)
+  local numerator = snip.captures[1]
+
+  if numerator:sub(1, 1) == "("
+    and numerator:sub(-1) == ")"
+    and atom.previous(numerator) == numerator then
+    return numerator:sub(2, -2)
+  end
+
+  return numerator
 end
 
 return {
@@ -149,6 +181,21 @@ return {
     f(euler_coefficient, {}),
     t("i\\pi"),
     f(optional_slash, { 1 }),
+    i(1),
+    t("}"),
+    i(0),
+  }),
+
+  s({
+    trig = "/",
+    trigEngine = term_trigger,
+    wordTrig = false,
+    snippetType = "autosnippet",
+    condition = in_mathzone,
+  }, {
+    t("\\frac{"),
+    f(fraction_numerator, {}),
+    t("}{"),
     i(1),
     t("}"),
     i(0),
