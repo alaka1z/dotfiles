@@ -13,10 +13,6 @@ return {
     { ">", " > " },
     { "<", " < " },
     { "pm", " \\pm " },
-    { "sr", "^2" },
-    { "cb", "^3" },
-    { "tp", "^{$1}$0" },
-    { "sb", "_{$1}$0" },
     { "abs", "\\left|$1\\right|$0" },
     { "sin", "\\sin{$1}$0" },
     { "cos", "\\cos{$1}$0" },
@@ -45,25 +41,36 @@ return {
 
   inword_regex_auto = {
     { "([NQRCZ])%1", "\\mathbb{%s}" },
-    { "i([NQRCZ])", " \\in \\mathbb{%s}" },
+  },
+
+  atom_auto = {
+  { "-", " - " },
+
+  { "sr", "^2" },
+  { "cb", "^3" },
+  { "tp", "^{$1}$0" },
+  { "sb", "_{$1}$0" },
+
+  { "ii", " \\in " },
+  { "iN", " \\in \\mathbb{N}" },
+  { "iQ", " \\in \\mathbb{Q}" },
+  { "iR", " \\in \\mathbb{R}" },
+  { "iC", " \\in \\mathbb{C}" },
+  { "iZ", " \\in \\mathbb{Z}" },
+  { "ni", " \\notin " },
+  { "ss", " \\subseteq " },
+  { "cap", " \\cap " },
+  { "cup", " \\cup " },
+  { "wo", " \\setminus " },
+
+  { "ne", " \\neq " },
+  { "le", " \\le " },
+  { "ge", " \\ge " },
   },
 
   postfix_auto = {
-    { "-", "%s - " },
-
     { "hat", "\\hat{%s}" },
     { "bar", "\\bar{%s}" },
     { "vec", "\\vec{%s}" },
-
-    { "ii", "%s \\in " },
-    { "ni", "%s \\notin " },
-    { "ss", "%s \\subseteq " },
-    { "cap", "%s \\cap " },
-    { "cup", "%s \\cup " },
-    { "wo", "%s \\setminus " },
-
-    { "ne", "%s \\neq " },
-    { "le", "%s \\le " },
-    { "ge", "%s \\ge " },
   },
 }
