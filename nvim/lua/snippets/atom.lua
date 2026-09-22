@@ -216,7 +216,9 @@ local function script_marker(text, finish)
     return nil
   end
 
-  if char(text, finish) == "}"
+  local current = char(text, finish)
+
+  if current == "}"
     and not is_escaped(text, finish) then
     local open = matching_open(text, finish)
 
@@ -241,7 +243,10 @@ local function script_marker(text, finish)
 
   local marker = char(text, finish - 1)
 
-  if marker == "^" or marker == "_" then
+  if (marker == "^" or marker == "_")
+    and current ~= "{"
+    and current ~= "["
+    and current ~= "(" then
     return finish - 1
   end
 end

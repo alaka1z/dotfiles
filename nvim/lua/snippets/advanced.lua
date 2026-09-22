@@ -173,6 +173,7 @@ return {
   s({
     trig = "e(m?)([1-9])",
     trigEngine = "pattern",
+    wordTrig = false,
     snippetType = "autosnippet",
     priority = 2000,
     condition = in_mathzone,
