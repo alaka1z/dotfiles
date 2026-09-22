@@ -15,6 +15,15 @@ return {
       ls.config.setup({
         enable_autosnippets = true,
         update_events = "TextChanged,TextChangedI",
+
+        keep_roots = false,
+        link_roots = false,
+        link_children = true,
+        exit_roots = true,
+
+        region_check_events = { "CursorMoved", "CursorMovedI" },
+        delete_check_events = { "TextChanged", "TextChangedI" },
+
         ext_opts = {
           [types.insertNode] = {
             active = {
