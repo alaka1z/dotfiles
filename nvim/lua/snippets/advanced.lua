@@ -1,6 +1,7 @@
 local ls = require("luasnip")
 local atom = require("snippets.atom")
 local term = require("snippets.term")
+local events = require("luasnip.util.events")
 
 local s, sn = ls.snippet, ls.snippet_node
 local t, i, d, f = ls.text_node, ls.insert_node, ls.dynamic_node, ls.function_node
@@ -87,6 +88,50 @@ local function fraction_numerator(_, snip)
   end
 
   return numerator
+end
+
+local function power_open(args)
+  return args[1][1] == "" and "" or "^{"
+end
+
+local function power_close(args)
+  return args[1][1] == "" and "" or "}"
+end
+
+local function powered_function(trigger, command)
+  return s({
+    trig = trigger,
+    wordTrig = false,
+    snippetType = "autosnippet",
+    condition = in_mathzone,
+  }, {
+    t("\\" .. command),
+    f(power_open, { 1 }),
+
+    i(1, "", {
+      node_callbacks = {
+        [events.enter] = function(node)
+          local snippet = node.parent.snippet or node.parent
+
+          if not snippet.power_skipped then
+            snippet.power_skipped = true
+
+            vim.schedule(function()
+              if ls.locally_jumpable(1) then
+                ls.jump(1)
+              end
+            end)
+          end
+        end,
+      },
+    }),
+
+    f(power_close, { 1 }),
+    t("{"),
+    i(2),
+    t("}"),
+    i(0),
+  })
 end
 
 return {
@@ -201,4 +246,12 @@ return {
     t("}"),
     i(0),
   }),
+
+  powered_function("sin", "sin"),
+  powered_function("cos", "cos"),
+  powered_function("tan", "tan"),
+
+  powered_function("sih", "sinh"),
+  powered_function("coh", "cosh"),
+  powered_function("tah", "tanh"),
 }

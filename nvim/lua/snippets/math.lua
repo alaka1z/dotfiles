@@ -1,7 +1,9 @@
 return {
   normal = {
     { "alp", "\\alpha" },
+    { "bet", "\\beta" },
     { "fto", "f : $1 \\to $0" },
+    { "cd", "\\cdots" },
   },
 
   auto = {
@@ -14,12 +16,6 @@ return {
     { "<", " < " },
     { "pm", " \\pm " },
     { "abs", "\\left|$1\\right|$0" },
-    { "sin", "\\sin{$1}$0" },
-    { "cos", "\\cos{$1}$0" },
-    { "tan", "\\tan{$1}$0" },
-    { "sih", "\\sinh{$1}$0" },
-    { "coh", "\\cosh{$1}$0" },
-    { "tah", "\\tanh{$1}$0" },
     { "exp", "\\exp{$1}$0" },
     { "ee", "e^{$1}$0" },
     { "ei", "e^{i$1}$0" },
@@ -34,6 +30,7 @@ return {
     { "pi", "\\pi" },
     { "th", "\\theta" },
     { "ff", "\\frac{$1}{$2}$0" },
+    { "set", "\\{$1\\\\}$0" },
   },
 
   regex_auto = {
