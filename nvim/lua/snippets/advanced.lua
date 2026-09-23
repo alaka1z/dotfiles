@@ -134,27 +134,43 @@ local function powered_function(trigger, command)
   })
 end
 
-local function visual_content(_, snip)
-  local selected = snip.env.LS_SELECT_RAW or {}
+local function visual_content(strip_open, strip_close)
+  return function(_, snip)
+    local selected = snip.env.LS_SELECT_RAW or {}
 
-  if #selected == 0 then
-    selected = vim.b.snippet_selection or {}
-    vim.b.snippet_selection = nil
+    if #selected == 0 then
+      selected = vim.b.snippet_selection or {}
+      vim.b.snippet_selection = nil
+    end
+
+    if #selected == 0 then
+      return sn(nil, { i(1) })
+    end
+
+    local text = table.concat(selected, "\n")
+
+    if text:sub(1, #strip_open) == strip_open
+      and text:sub(-#strip_close) == strip_close
+      and atom.previous(text) == text then
+      text = text:sub(#strip_open + 1, -#strip_close - 1)
+    end
+
+    return sn(nil, { i(1, text) })
   end
+end
 
-  if #selected == 0 then
-    return sn(nil, { i(1) })
-  end
-
-  local text = table.concat(selected, "\n")
-
-  if text:sub(1, 1) == "("
-    and text:sub(-1) == ")"
-    and atom.previous(text) == text then
-    text = text:sub(2, -2)
-  end
-
-  return sn(nil, { i(1, text) })
+local function scalable_delimiter(trigger, left, right, strip_open, strip_close)
+  return s({
+    trig = trigger,
+    wordTrig = false,
+    snippetType = "autosnippet",
+    condition = in_mathzone,
+  }, {
+    t(left),
+    d(1, visual_content(strip_open, strip_close), {}),
+    t(right),
+    i(0),
+  })
 end
 
 return {
@@ -278,15 +294,8 @@ return {
   powered_function("coh", "cosh"),
   powered_function("tah", "tanh"),
 
-  s({
-    trig = "lrp",
-    wordTrig = false,
-    snippetType = "autosnippet",
-    condition = in_mathzone,
-  }, {
-    t("\\left("),
-    d(1, visual_content, {}),
-    t("\\right)"),
-    i(0),
-  }),
+  scalable_delimiter("lrp", "\\left(", "\\right)", "(", ")"),
+  scalable_delimiter("lrs", "\\left[", "\\right]", "[", "]"),
+  scalable_delimiter("lrc", "\\left\\{", "\\right\\}", "\\{", "\\}"),
+  scalable_delimiter("lrv", "\\left|", "\\right|", "|", "|"),
 }
