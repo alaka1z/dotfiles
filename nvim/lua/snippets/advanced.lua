@@ -134,6 +134,29 @@ local function powered_function(trigger, command)
   })
 end
 
+local function visual_content(_, snip)
+  local selected = snip.env.LS_SELECT_RAW or {}
+
+  if #selected == 0 then
+    selected = vim.b.snippet_selection or {}
+    vim.b.snippet_selection = nil
+  end
+
+  if #selected == 0 then
+    return sn(nil, { i(1) })
+  end
+
+  local text = table.concat(selected, "\n")
+
+  if text:sub(1, 1) == "("
+    and text:sub(-1) == ")"
+    and atom.previous(text) == text then
+    text = text:sub(2, -2)
+  end
+
+  return sn(nil, { i(1, text) })
+end
+
 return {
   s({
     trig = "mat(%d+)(%d+)",
@@ -254,4 +277,16 @@ return {
   powered_function("sih", "sinh"),
   powered_function("coh", "cosh"),
   powered_function("tah", "tanh"),
+
+  s({
+    trig = "lrp",
+    wordTrig = false,
+    snippetType = "autosnippet",
+    condition = in_mathzone,
+  }, {
+    t("\\left("),
+    d(1, visual_content, {}),
+    t("\\right)"),
+    i(0),
+  }),
 }

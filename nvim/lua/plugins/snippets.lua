@@ -14,6 +14,7 @@ return {
 
       ls.config.setup({
         enable_autosnippets = true,
+        store_selection_keys = "<Tab>",
         update_events = "TextChanged,TextChangedI",
 
         keep_roots = false,
@@ -105,6 +106,16 @@ return {
         if ls.locally_jumpable(-1) then
           ls.jump(-1)
         end
+      end, { silent = true })
+
+      map("x", "<S-Tab>", function()
+        vim.b.snippet_selection = vim.fn.getregion(
+          vim.fn.getpos("v"),
+          vim.fn.getpos("."),
+          { type = vim.fn.mode() }
+        )
+
+        vim.cmd("normal! y")
       end, { silent = true })
     end,
   },
