@@ -78,6 +78,19 @@ return {
 
       vim.api.nvim_create_user_command("SnippetsReload", load_snippets, {})
 
+      map("i", "<End>", function()
+        ls.session.config.enable_autosnippets =
+          not ls.session.config.enable_autosnippets
+
+        ls.config._setup()
+
+        vim.notify(
+          ls.session.config.enable_autosnippets
+            and "Snippets on"
+            or "Snippets off"
+        )
+      end, { silent = true })
+
       -- Expand snippets and move forward through their fields
       map({ "i", "s" }, "<Tab>", function()
         if ls.expand_or_locally_jumpable() then

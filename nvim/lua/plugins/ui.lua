@@ -25,6 +25,17 @@ return {
         lualine_x = {
           {
             function()
+              local ls = require("luasnip")
+
+              if not ls.session.config.enable_autosnippets then
+                return "LIT"
+              end
+
+              return ""
+            end,
+          },
+          {
+            function()
               return vim.g.latex_viewer_mode == "texpresso"
               and vim.fn.nr2char(0x100001)
               or vim.fn.nr2char(0x100000)
